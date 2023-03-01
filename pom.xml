@@ -11,6 +11,7 @@
 
     <modules>
         <module>tpc-h-data</module>
+        <module>tpc-h-doyto-query</module>
     </modules>
 
     <properties>
