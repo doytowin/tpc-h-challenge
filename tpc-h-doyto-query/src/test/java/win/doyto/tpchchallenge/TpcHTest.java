@@ -7,6 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import win.doyto.query.core.DataQueryClient;
 import win.doyto.tpchchallenge.q1.PricingSummaryQuery;
 import win.doyto.tpchchallenge.q1.PricingSummaryView;
+import win.doyto.tpchchallenge.q2.MinimumCostSupplierQuery;
+import win.doyto.tpchchallenge.q2.MinimumCostSupplierView;
+import win.doyto.tpchchallenge.q2.SupplyCostQuery;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -48,4 +51,24 @@ class TpcHTest {
                         );
     }
 
+    @Test
+    void queryForMinimumCostSupplier() {
+        MinimumCostSupplierQuery query = MinimumCostSupplierQuery
+                .builder()
+                .p_size(45)
+                .p_typeEnd("BRASS")
+                .r_name("EUROPE")
+                .ps_supplycost(SupplyCostQuery.builder().r_name("EUROPE").build())
+                .sort("s_acctbal,DESC;n_name;s_name;p_partkey")
+                .build();
+
+        List<MinimumCostSupplierView> list = dataQueryClient.aggregate(query, MinimumCostSupplierView.class);
+
+        assertThat(list).hasSize(2);
+        assertThat(list).extracting("s_acctbal", "s_name", "n_name")
+                        .containsExactly(
+                                Tuple.tuple(BigDecimal.valueOf(2972.26), "Supplier#000000016", "RUSSIA"),
+                                Tuple.tuple(BigDecimal.valueOf(1381.97), "Supplier#000000104", "FRANCE")
+                        );
+    }
 }
