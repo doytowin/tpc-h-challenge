@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
+import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
@@ -39,7 +40,7 @@ import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MinimumCostSupplierQuery extends PageQuery {
+public class MinimumCostSupplierQuery extends PageQuery implements AggregationQuery {
     private Integer p_size;
     private String p_typeEnd;
     private String r_name;

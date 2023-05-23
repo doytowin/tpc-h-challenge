@@ -13,7 +13,7 @@
     <artifactId>tpc-h-doyto-query</artifactId>
 
     <properties>
-        <doyto-query.version>1.0.1-SNAPSHOT</doyto-query.version>
+        <doyto-query.version>1.0.1</doyto-query.version>
     </properties>
 
     <dependencies>
