@@ -42,4 +42,6 @@ jobs:
           mvn -B jacoco:report sonar:sonar \
           -Dsonar.projectKey=win.doyto:tpc-h-challenge \
           -Dsonar.projectName=tpc-h-challenge \
-          -Dsonar.exclusions=**/pom.xml
+          -Dsonar.exclusions=**/pom.xml \
+          -Dsonar.organization=f0rb-github \
+          -Dsonar.host.url=https://sonarcloud.io
