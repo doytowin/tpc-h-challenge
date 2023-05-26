@@ -10,8 +10,12 @@ import win.doyto.tpchchallenge.q1.PricingSummaryView;
 import win.doyto.tpchchallenge.q2.MinimumCostSupplierQuery;
 import win.doyto.tpchchallenge.q2.MinimumCostSupplierView;
 import win.doyto.tpchchallenge.q2.SupplyCostQuery;
+import win.doyto.tpchchallenge.q3.ShippingPriorityQuery;
+import win.doyto.tpchchallenge.q3.ShippingPriorityView;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import javax.annotation.Resource;
 
@@ -69,6 +73,25 @@ class TpcHTest {
                         .containsExactly(
                                 Tuple.tuple(BigDecimal.valueOf(2972.26), "Supplier#000000016", "RUSSIA"),
                                 Tuple.tuple(BigDecimal.valueOf(1381.97), "Supplier#000000104", "FRANCE")
+                        );
+    }
+
+    @Test
+    void queryForShippingPriority() {
+        Date date = Date.valueOf(LocalDate.of(1995, 3, 15));
+        ShippingPriorityQuery query = ShippingPriorityQuery
+                .builder()
+                .c_mktsegment("BUILDING")
+                .o_orderdateLt(date)
+                .l_shipdateGt(date)
+                .sort("revenue,DESC;o_orderdate")
+                .build();
+
+        List<ShippingPriorityView> list = dataQueryClient.aggregate(query, ShippingPriorityView.class);
+
+        assertThat(list).extracting("l_orderkey", "revenue", "o_shippriority")
+                        .containsExactly(
+                                Tuple.tuple("3934949", 16103.5, "0")
                         );
     }
 }
