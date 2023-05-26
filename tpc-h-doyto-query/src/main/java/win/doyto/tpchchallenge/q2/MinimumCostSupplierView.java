@@ -18,7 +18,6 @@ package win.doyto.tpchchallenge.q2;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import win.doyto.query.annotation.CompositeView;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.part.PartEntity;
@@ -46,12 +45,4 @@ public class MinimumCostSupplierView {
     private String s_address;
     private String s_phone;
     private String s_comment;
-
-    public void setS_name(String s_name) {
-        this.s_name = StringUtils.trim(s_name);
-    }
-
-    public void setN_name(String n_name) {
-        this.n_name = StringUtils.trim(n_name);
-    }
 }

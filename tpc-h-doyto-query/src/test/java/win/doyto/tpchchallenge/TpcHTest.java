@@ -12,13 +12,17 @@ import win.doyto.tpchchallenge.q2.MinimumCostSupplierView;
 import win.doyto.tpchchallenge.q2.SupplyCostQuery;
 import win.doyto.tpchchallenge.q3.ShippingPriorityQuery;
 import win.doyto.tpchchallenge.q3.ShippingPriorityView;
+import win.doyto.tpchchallenge.q4.LineItemReceiptQuery;
+import win.doyto.tpchchallenge.q4.OrderPriorityCheckingQuery;
+import win.doyto.tpchchallenge.q4.OrderPriorityCheckingView;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import javax.annotation.Resource;
 
+import static java.time.temporal.ChronoUnit.MONTHS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -47,12 +51,12 @@ class TpcHTest {
 
         assertThat(list).hasSize(3);
         assertThat(list).extracting("l_returnflag", "l_linestatus", "avg_disc")
-                        .usingRecursiveFieldByFieldElementComparator(configuration)
-                        .containsExactly(
-                                Tuple.tuple("A", "F", BigDecimal.valueOf(0.048)),
-                                Tuple.tuple("N", "O", BigDecimal.valueOf(0.051)),
-                                Tuple.tuple("R", "F", BigDecimal.valueOf(0.046666666667))
-                        );
+                .usingRecursiveFieldByFieldElementComparator(configuration)
+                .containsExactly(
+                        Tuple.tuple("A", "F", BigDecimal.valueOf(0.048)),
+                        Tuple.tuple("N", "O", BigDecimal.valueOf(0.051)),
+                        Tuple.tuple("R", "F", BigDecimal.valueOf(0.046666666667))
+                );
     }
 
     @Test
@@ -70,10 +74,10 @@ class TpcHTest {
 
         assertThat(list).hasSize(2);
         assertThat(list).extracting("s_acctbal", "s_name", "n_name")
-                        .containsExactly(
-                                Tuple.tuple(BigDecimal.valueOf(2972.26), "Supplier#000000016", "RUSSIA"),
-                                Tuple.tuple(BigDecimal.valueOf(1381.97), "Supplier#000000104", "FRANCE")
-                        );
+                .containsExactly(
+                        Tuple.tuple(BigDecimal.valueOf(2972.26), "Supplier#000000016", "RUSSIA"),
+                        Tuple.tuple(BigDecimal.valueOf(1381.97), "Supplier#000000104", "FRANCE")
+                );
     }
 
     @Test
@@ -90,8 +94,30 @@ class TpcHTest {
         List<ShippingPriorityView> list = dataQueryClient.aggregate(query, ShippingPriorityView.class);
 
         assertThat(list).extracting("l_orderkey", "revenue", "o_shippriority")
-                        .containsExactly(
-                                Tuple.tuple("3934949", 16103.5, "0")
-                        );
+                .containsExactly(
+                        Tuple.tuple("3934949", 16103.5, "0")
+                );
+    }
+
+    @Test
+    void queryForOrderPriorityChecking() {
+        LocalDate date = LocalDate.of(1993, 7, 1);
+        Date orderDateGe = Date.valueOf(date);
+        Date orderDateLt = Date.valueOf(date.plus(3, MONTHS));
+        OrderPriorityCheckingQuery query = OrderPriorityCheckingQuery
+                .builder()
+                .o_orderdateGe(orderDateGe)
+                .o_orderdateLt(orderDateLt)
+                .orderExists(new LineItemReceiptQuery())
+                .sort("o_orderpriority")
+                .build();
+
+        List<OrderPriorityCheckingView> list = dataQueryClient.aggregate(query, OrderPriorityCheckingView.class);
+
+        assertThat(list).extracting("o_orderpriority", "order_count")
+                .containsExactly(
+                        Tuple.tuple("1-URGENT", 1),
+                        Tuple.tuple("3-MEDIUM", 1)
+                );
     }
 }

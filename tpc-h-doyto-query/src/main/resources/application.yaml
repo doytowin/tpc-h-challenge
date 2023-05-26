@@ -8,3 +8,7 @@ doyto:
   query:
     config:
       table-format: "%s"
+
+spring:
+  datasource:
+    url: "jdbc:h2:mem:tpch;MODE=MySQL"
