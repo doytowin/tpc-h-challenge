@@ -18,6 +18,12 @@
         <revision>1.0.0-SNAPSHOT</revision>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
+        <argLine/>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jacoco.destFile>${user.dir}/target/jacoco.exec</jacoco.destFile>
+        <jacoco.dataFile>${user.dir}/target/jacoco.exec</jacoco.dataFile>
+
         <spring-boot.version>2.7.5</spring-boot.version>
     </properties>
 
@@ -35,6 +41,34 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <argLine>@{argLine} -Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.10</version>
+                <executions>
+                    <execution>
+                        <id>pre-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- 更新pom版本号-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
