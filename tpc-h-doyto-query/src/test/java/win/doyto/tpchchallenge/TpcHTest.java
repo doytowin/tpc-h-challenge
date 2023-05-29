@@ -15,6 +15,8 @@ import win.doyto.tpchchallenge.q3.ShippingPriorityView;
 import win.doyto.tpchchallenge.q4.LineItemReceiptQuery;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingQuery;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingView;
+import win.doyto.tpchchallenge.q5.LocalSupplierVolumeQuery;
+import win.doyto.tpchchallenge.q5.LocalSupplierVolumeView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -23,6 +25,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.MONTHS;
+import static java.time.temporal.ChronoUnit.YEARS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -119,5 +122,23 @@ class TpcHTest {
                         Tuple.tuple("1-URGENT", 1),
                         Tuple.tuple("3-MEDIUM", 1)
                 );
+    }
+
+    @Test
+    void queryForLocalSupplierVolume() {
+        LocalDate date = LocalDate.of(1994, 1, 1);
+        Date orderDateGe = Date.valueOf(date);
+        Date orderDateLt = Date.valueOf(date.plus(1, YEARS));
+        LocalSupplierVolumeQuery query = LocalSupplierVolumeQuery
+                .builder()
+                .r_name("ASIA")
+                .o_orderdateGe(orderDateGe)
+                .o_orderdateLt(orderDateLt)
+                .sort("revenue,DESC")
+                .build();
+
+        List<LocalSupplierVolumeView> list = dataQueryClient.aggregate(query, LocalSupplierVolumeView.class);
+
+        assertThat(list).isEmpty();
     }
 }
