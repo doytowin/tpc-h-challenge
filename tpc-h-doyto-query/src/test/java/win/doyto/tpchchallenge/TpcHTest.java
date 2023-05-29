@@ -17,6 +17,8 @@ import win.doyto.tpchchallenge.q4.OrderPriorityCheckingQuery;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingView;
 import win.doyto.tpchchallenge.q5.LocalSupplierVolumeQuery;
 import win.doyto.tpchchallenge.q5.LocalSupplierVolumeView;
+import win.doyto.tpchchallenge.q6.ForecastingRevenueChangeQuery;
+import win.doyto.tpchchallenge.q6.ForecastingRevenueChangeView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -140,5 +142,19 @@ class TpcHTest {
         List<LocalSupplierVolumeView> list = dataQueryClient.aggregate(query, LocalSupplierVolumeView.class);
 
         assertThat(list).isEmpty();
+    }
+
+    @Test
+    void queryForForecastingRevenueChange() {
+        ForecastingRevenueChangeQuery query = new ForecastingRevenueChangeQuery();
+        LocalDate date = LocalDate.of(1994, 1, 1);
+        query.setBaseShipdate(date);
+        query.setBaseDiscount(BigDecimal.valueOf(0.03));
+        query.setL_quantityLt(31);
+
+        List<ForecastingRevenueChangeView> list = dataQueryClient.aggregate(query, ForecastingRevenueChangeView.class);
+
+        assertThat(list).extracting("revenue")
+                .containsExactly(BigDecimal.valueOf(745.6876));
     }
 }
