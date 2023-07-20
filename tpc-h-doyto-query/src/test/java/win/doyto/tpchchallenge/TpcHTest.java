@@ -26,6 +26,9 @@ import win.doyto.tpchchallenge.q7.VolumeShippingView;
 import win.doyto.tpchchallenge.q8.AllNationsQuery;
 import win.doyto.tpchchallenge.q8.NationalMarketShareQuery;
 import win.doyto.tpchchallenge.q8.NationalMarketShareView;
+import win.doyto.tpchchallenge.q9.ProductTypeProfitMeasureQuery;
+import win.doyto.tpchchallenge.q9.ProductTypeProfitMeasureView;
+import win.doyto.tpchchallenge.q9.ProfitQuery;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -220,5 +223,21 @@ class TpcHTest {
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                 .extracting("o_year", "mkt_share")
                 .containsExactly(Tuple.tuple("1995", BigDecimal.valueOf(1)));
+    }
+
+    @Test
+    void q9ProductTypeProfitMeasureQuery() {
+        ProfitQuery profitQuery = ProfitQuery.builder().p_nameLike("green").build();
+        ProductTypeProfitMeasureQuery query = ProductTypeProfitMeasureQuery
+                .builder()
+                .profitQuery(profitQuery)
+                .sort("nation;o_year,DESC")
+                .build();
+
+        List<ProductTypeProfitMeasureView> list = dataQueryClient.aggregate(query, ProductTypeProfitMeasureView.class);
+
+        assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
+                        .extracting("nation", "o_year", "sum_profit")
+                        .containsExactly(Tuple.tuple("GERMANY", "1994", BigDecimal.valueOf(1329820.6856)));
     }
 }
