@@ -23,6 +23,9 @@ import win.doyto.tpchchallenge.q7.NameComparison;
 import win.doyto.tpchchallenge.q7.ShippingQuery;
 import win.doyto.tpchchallenge.q7.VolumeShippingQuery;
 import win.doyto.tpchchallenge.q7.VolumeShippingView;
+import win.doyto.tpchchallenge.q8.AllNationsQuery;
+import win.doyto.tpchchallenge.q8.NationalMarketShareQuery;
+import win.doyto.tpchchallenge.q8.NationalMarketShareView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -191,5 +194,31 @@ class TpcHTest {
                         .containsExactly(
                                 Tuple.tuple("IRAN", "RUSSIA", BigDecimal.valueOf(8142.564))
                         );
+    }
+
+    @Test
+    void q8NationalMarketShareQuery() {
+        Date startShipdate = Date.valueOf(LocalDate.of(1995, 1, 1));
+        Date endShipdate = Date.valueOf(LocalDate.of(1996, 12, 31));
+
+        AllNationsQuery allNationsQuery = AllNationsQuery
+                .builder()
+                .r_name("AMERICA")
+                .o_orderdateGe(startShipdate)
+                .o_orderdateLe(endShipdate)
+                .p_type("LARGE ANODIZED COPPER")
+                .build();
+
+        NationalMarketShareQuery query = NationalMarketShareQuery
+                .builder()
+                .nationEq("CANADA")
+                .allNationsQuery(allNationsQuery).sort("o_year")
+                .build();
+
+        List<NationalMarketShareView> list = dataQueryClient.aggregate(query, NationalMarketShareView.class);
+
+        assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
+                .extracting("o_year", "mkt_share")
+                .containsExactly(Tuple.tuple("1995", BigDecimal.valueOf(1)));
     }
 }
