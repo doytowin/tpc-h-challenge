@@ -22,13 +22,13 @@ import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 
-import java.math.BigDecimal;
 import javax.persistence.Column;
+import java.math.BigDecimal;
 
 /**
  * PricingSummaryView
  *
- * @author f0rb on 2023/2/16l_orderkey
+ * @author f0rb on 2023/2/16
  */
 @Getter
 @Setter

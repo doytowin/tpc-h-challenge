@@ -19,13 +19,13 @@ package win.doyto.tpchchallenge.domain.partsupp;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import javax.persistence.Entity;
+import java.math.BigDecimal;
 
 /**
  * PartSuppEntity
  *
- * @author f0rb on 2023/2/17l_orderkey
+ * @author f0rb on 2023/2/17
  */
 @Getter
 @Setter

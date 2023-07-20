@@ -24,16 +24,16 @@ import win.doyto.query.validation.PatchGroup;
 import win.doyto.query.validation.UpdateGroup;
 import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
 
-import java.math.BigDecimal;
-import java.sql.Date;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 /**
  * OrdersEntity
  *
- * @author f0rb on 2023/2/16l_orderkey
+ * @author f0rb on 2023/2/16
  */
 @Getter
 @Setter

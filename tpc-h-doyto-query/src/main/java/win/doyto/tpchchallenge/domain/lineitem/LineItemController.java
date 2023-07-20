@@ -13,7 +13,7 @@ import win.doyto.query.web.controller.AbstractEIQController;
  */
 @RestController
 @RequestMapping("lineitem")
-public class LineItemController extends AbstractEIQController<LineItemEntity, LineItemKey, LineitemQuery> {
+public class LineItemController extends AbstractEIQController<LineItemEntity, LineItemKey, LineItemQuery> {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(LineItemKey.class, new LineItemKeyEditor());

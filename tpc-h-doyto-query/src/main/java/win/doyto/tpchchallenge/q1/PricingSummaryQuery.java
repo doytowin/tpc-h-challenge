@@ -21,14 +21,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.annotation.QueryField;
 import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
+
+import java.util.Date;
 
 /**
  * PricingSummaryQuery
  *
- * @author f0rb on 2023/2/16l_orderkey
+ * @author f0rb on 2023/2/16
  */
 @Getter
 @Setter
@@ -36,6 +37,5 @@ import win.doyto.query.core.PageQuery;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PricingSummaryQuery extends PageQuery implements AggregationQuery {
-    @QueryField(and = "l_shipdate <= DATEADD (DAY, ?, DATE '2012-02-29')")
-    private Integer shipdateDelta;
+    private Date lShipdateLe;
 }

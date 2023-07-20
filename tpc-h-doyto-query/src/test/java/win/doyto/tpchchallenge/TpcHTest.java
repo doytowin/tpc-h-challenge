@@ -45,10 +45,11 @@ class TpcHTest {
     private DataQueryClient dataQueryClient;
 
     @Test
-    void queryForPricingSummaryReport() {
+    void q1PricingSummaryReportQuery() {
+        Date date = Date.valueOf(LocalDate.of(1998, 9, 1));
         PricingSummaryQuery query = PricingSummaryQuery
                 .builder()
-                .shipdateDelta(90)
+                .lShipdateLe(date)
                 .sort("l_returnflag;l_linestatus")
                 .build();
 
@@ -65,7 +66,7 @@ class TpcHTest {
     }
 
     @Test
-    void queryForMinimumCostSupplier() {
+    void q2MinimumCostSupplierQuery() {
         MinimumCostSupplierQuery query = MinimumCostSupplierQuery
                 .builder()
                 .p_size(45)
@@ -86,7 +87,7 @@ class TpcHTest {
     }
 
     @Test
-    void queryForShippingPriority() {
+    void q3ShippingPriorityQuery() {
         Date date = Date.valueOf(LocalDate.of(1995, 3, 15));
         ShippingPriorityQuery query = ShippingPriorityQuery
                 .builder()
@@ -105,7 +106,7 @@ class TpcHTest {
     }
 
     @Test
-    void queryForOrderPriorityChecking() {
+    void q4OrderPriorityCheckingQuery() {
         LocalDate date = LocalDate.of(1993, 7, 1);
         Date orderDateGe = Date.valueOf(date);
         Date orderDateLt = Date.valueOf(date.plus(3, MONTHS));
@@ -127,7 +128,7 @@ class TpcHTest {
     }
 
     @Test
-    void queryForLocalSupplierVolume() {
+    void q5LocalSupplierVolumeQuery() {
         LocalDate date = LocalDate.of(1994, 1, 1);
         Date orderDateGe = Date.valueOf(date);
         Date orderDateLt = Date.valueOf(date.plus(1, YEARS));
@@ -145,7 +146,7 @@ class TpcHTest {
     }
 
     @Test
-    void queryForForecastingRevenueChange() {
+    void q6ForecastingRevenueChangeQuery() {
         ForecastingRevenueChangeQuery query = new ForecastingRevenueChangeQuery();
         LocalDate date = LocalDate.of(1994, 1, 1);
         query.setBaseShipdate(date);

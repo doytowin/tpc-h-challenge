@@ -22,15 +22,15 @@ import win.doyto.query.entity.Persistable;
 import win.doyto.query.validation.PatchGroup;
 import win.doyto.query.validation.UpdateGroup;
 
-import java.math.BigDecimal;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
  * PartEntity
  *
- * @author f0rb on 2023/2/17l_orderkey
+ * @author f0rb on 2023/2/17
  */
 @Getter
 @Setter

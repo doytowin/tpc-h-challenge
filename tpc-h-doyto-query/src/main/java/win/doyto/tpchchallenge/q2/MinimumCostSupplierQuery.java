@@ -25,6 +25,7 @@ import win.doyto.query.annotation.Subquery;
 import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
+import win.doyto.tpchchallenge.domain.part.PartEntity;
 import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
 import win.doyto.tpchchallenge.domain.region.RegionEntity;
 import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
@@ -44,7 +45,8 @@ public class MinimumCostSupplierQuery extends PageQuery implements AggregationQu
     private Integer p_size;
     private String p_typeEnd;
     private String r_name;
-    @Subquery(select = "MIN(ps_supplycost)", parentColumns = {"p_partkey"},
+    @Subquery(select = "MIN(ps_supplycost)",
+            host = {PartEntity.class},
             from = {PartSuppEntity.class, SupplierEntity.class, NationEntity.class, RegionEntity.class})
     private SupplyCostQuery ps_supplycost;
 }

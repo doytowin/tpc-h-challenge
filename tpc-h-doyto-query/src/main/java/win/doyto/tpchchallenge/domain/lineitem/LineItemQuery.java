@@ -26,15 +26,15 @@ import win.doyto.query.core.PageQuery;
 import java.math.BigDecimal;
 
 /**
- * LineitemQuery
+ * LineItemQuery
  *
- * @author f0rb on 2023/2/19l_orderkey
+ * @author f0rb on 2023/2/19
  */
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineitemQuery extends PageQuery {
+public class LineItemQuery extends PageQuery {
     private BigDecimal l_discountGt;
 }

@@ -26,7 +26,7 @@ import win.doyto.query.core.PageQuery;
 /**
  * PartQuery
  *
- * @author f0rb on 2023/2/19l_orderkey
+ * @author f0rb on 2023/2/19
  */
 @Getter
 @Setter
