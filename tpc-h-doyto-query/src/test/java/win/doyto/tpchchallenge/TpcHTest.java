@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import win.doyto.query.core.DataQueryClient;
 import win.doyto.tpchchallenge.q1.PricingSummaryQuery;
 import win.doyto.tpchchallenge.q1.PricingSummaryView;
+import win.doyto.tpchchallenge.q10.ReturnedItemReportingQuery;
+import win.doyto.tpchchallenge.q10.ReturnedItemReportingView;
 import win.doyto.tpchchallenge.q2.MinimumCostSupplierQuery;
 import win.doyto.tpchchallenge.q2.MinimumCostSupplierView;
 import win.doyto.tpchchallenge.q2.SupplyCostQuery;
@@ -239,5 +241,28 @@ class TpcHTest {
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                         .extracting("nation", "o_year", "sum_profit")
                         .containsExactly(Tuple.tuple("GERMANY", "1994", BigDecimal.valueOf(1329820.6856)));
+    }
+
+    @Test
+    void q10ReturnedItemReportingQuery() {
+        LocalDate date = LocalDate.of(1994, 1, 1);
+
+        ReturnedItemReportingQuery query = ReturnedItemReportingQuery
+                .builder()
+                .o_orderdateGe(Date.valueOf(date))
+                .o_orderdateLt(Date.valueOf(date.plus(12, MONTHS)))
+                .l_returnflag("R")
+                .sort("revenue,DESC")
+                .build();
+
+        List<ReturnedItemReportingView> list = dataQueryClient.aggregate(query, ReturnedItemReportingView.class);
+
+        assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
+                        .extracting("c_custkey", "c_name", "revenue", "n_name")
+                        .containsExactly(
+                                Tuple.tuple(137, "Customer#000000137", BigDecimal.valueOf(60072.1000), "MOZAMBIQUE"),
+                                Tuple.tuple(232, "Customer#000000232", BigDecimal.valueOf(8142.5640), "RUSSIA"),
+                                Tuple.tuple(64, "Customer#000000064", BigDecimal.valueOf(2356.4544), "CANADA")
+                        );
     }
 }
