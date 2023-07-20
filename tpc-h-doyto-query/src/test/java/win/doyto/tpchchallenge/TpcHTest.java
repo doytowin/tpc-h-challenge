@@ -19,11 +19,16 @@ import win.doyto.tpchchallenge.q5.LocalSupplierVolumeQuery;
 import win.doyto.tpchchallenge.q5.LocalSupplierVolumeView;
 import win.doyto.tpchchallenge.q6.ForecastingRevenueChangeQuery;
 import win.doyto.tpchchallenge.q6.ForecastingRevenueChangeView;
+import win.doyto.tpchchallenge.q7.NameComparison;
+import win.doyto.tpchchallenge.q7.ShippingQuery;
+import win.doyto.tpchchallenge.q7.VolumeShippingQuery;
+import win.doyto.tpchchallenge.q7.VolumeShippingView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.time.temporal.ChronoUnit.MONTHS;
@@ -57,12 +62,12 @@ class TpcHTest {
 
         assertThat(list).hasSize(3);
         assertThat(list).extracting("l_returnflag", "l_linestatus", "avg_disc")
-                .usingRecursiveFieldByFieldElementComparator(configuration)
-                .containsExactly(
-                        Tuple.tuple("A", "F", BigDecimal.valueOf(0.048)),
-                        Tuple.tuple("N", "O", BigDecimal.valueOf(0.051)),
-                        Tuple.tuple("R", "F", BigDecimal.valueOf(0.046666666667))
-                );
+                        .usingRecursiveFieldByFieldElementComparator(configuration)
+                        .containsExactly(
+                                Tuple.tuple("A", "F", BigDecimal.valueOf(0.048)),
+                                Tuple.tuple("N", "O", BigDecimal.valueOf(0.051)),
+                                Tuple.tuple("R", "F", BigDecimal.valueOf(0.046666666667))
+                        );
     }
 
     @Test
@@ -80,10 +85,10 @@ class TpcHTest {
 
         assertThat(list).hasSize(2);
         assertThat(list).extracting("s_acctbal", "s_name", "n_name")
-                .containsExactly(
-                        Tuple.tuple(BigDecimal.valueOf(2972.26), "Supplier#000000016", "RUSSIA"),
-                        Tuple.tuple(BigDecimal.valueOf(1381.97), "Supplier#000000104", "FRANCE")
-                );
+                        .containsExactly(
+                                Tuple.tuple(BigDecimal.valueOf(2972.26), "Supplier#000000016", "RUSSIA"),
+                                Tuple.tuple(BigDecimal.valueOf(1381.97), "Supplier#000000104", "FRANCE")
+                        );
     }
 
     @Test
@@ -100,9 +105,9 @@ class TpcHTest {
         List<ShippingPriorityView> list = dataQueryClient.aggregate(query, ShippingPriorityView.class);
 
         assertThat(list).extracting("l_orderkey", "revenue", "o_shippriority")
-                .containsExactly(
-                        Tuple.tuple("3934949", 16103.5, "0")
-                );
+                        .containsExactly(
+                                Tuple.tuple("3934949", 16103.5, "0")
+                        );
     }
 
     @Test
@@ -121,10 +126,10 @@ class TpcHTest {
         List<OrderPriorityCheckingView> list = dataQueryClient.aggregate(query, OrderPriorityCheckingView.class);
 
         assertThat(list).extracting("o_orderpriority", "order_count")
-                .containsExactly(
-                        Tuple.tuple("1-URGENT", 1),
-                        Tuple.tuple("3-MEDIUM", 1)
-                );
+                        .containsExactly(
+                                Tuple.tuple("1-URGENT", 1),
+                                Tuple.tuple("3-MEDIUM", 1)
+                        );
     }
 
     @Test
@@ -156,6 +161,35 @@ class TpcHTest {
         List<ForecastingRevenueChangeView> list = dataQueryClient.aggregate(query, ForecastingRevenueChangeView.class);
 
         assertThat(list).extracting("revenue")
-                .containsExactly(BigDecimal.valueOf(745.6876));
+                        .containsExactly(BigDecimal.valueOf(745.6876));
+    }
+
+    @Test
+    void q7VolumeShippingQuery() {
+        Date startShipdate = Date.valueOf(LocalDate.of(1995, 1, 1));
+        Date endShipdate = Date.valueOf(LocalDate.of(1996, 12, 31));
+
+        ShippingQuery shippingQuery = ShippingQuery
+                .builder()
+                .nameOr(Arrays.asList(
+                        new NameComparison("IRAN", "RUSSIA"),
+                        new NameComparison("RUSSIA", "IRAN")
+                ))
+                .l_shipdateGe(startShipdate)
+                .l_shipdateLe(endShipdate)
+                .build();
+        VolumeShippingQuery query = VolumeShippingQuery
+                .builder()
+                .shippingQuery(shippingQuery)
+                .sort("supp_nation;cust_nation;l_year")
+                .build();
+
+        List<VolumeShippingView> list = dataQueryClient.aggregate(query, VolumeShippingView.class);
+
+        assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
+                        .extracting("supp_nation", "cust_nation", "revenue")
+                        .containsExactly(
+                                Tuple.tuple("IRAN", "RUSSIA", BigDecimal.valueOf(8142.564))
+                        );
     }
 }
