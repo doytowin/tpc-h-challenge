@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q11;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import lombok.*;
+import win.doyto.query.annotation.Subquery;
+import win.doyto.query.core.Having;
+import win.doyto.tpchchallenge.domain.nation.NationEntity;
+import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
 /**
- * LineItemQuery
+ * ValueHaving
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/2/18
+ * @since 1.0.1
  */
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+public class ValueHaving implements Having {
+    @Subquery(select = "SUM(ps_supplycost * ps_availqty) * 0.0001000000e-2",
+            from = {PartSuppEntity.class, SupplierEntity.class, NationEntity.class})
+    private ValueQuery valGt;
 }

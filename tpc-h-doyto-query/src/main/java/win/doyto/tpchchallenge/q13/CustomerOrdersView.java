@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q13;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
+import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
+import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.persistence.Column;
 
 /**
- * LineItemQuery
+ * CustomerOrdersView
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/6/15
+ * @since 1.0.2
  */
 @Getter
 @Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+@View(value = CustomerEntity.class, alias = "c")
+public class CustomerOrdersView {
+    @GroupBy
+    private Integer c_custkey;
+    @Column(name = "COUNT(o_orderkey)")
+    private Long c_count;
 }

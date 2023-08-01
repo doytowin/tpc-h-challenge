@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q22;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
+import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.NestedView;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.persistence.Column;
 
 /**
- * LineItemQuery
+ * GlobalSalesOpportunityView
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/7/13
+ * @since 1.0.2
  */
 @Getter
 @Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+@NestedView(CustsaleView.class)
+public class GlobalSalesOpportunityView {
+    @GroupBy
+    private String cntrycode;
+    @Column(name = "count(*)")
+    private Long numcust;
+    @Column(name = "sum(c_acctbal)")
+    private Long totacctbal;
 }

@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q11;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
- * LineItemQuery
+ * ImportantStockIdentificationQuery
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/2/18
+ * @since 1.0.1
  */
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+public class ImportantStockIdentificationQuery extends PageQuery implements AggregationQuery {
+    private String n_name;
+    private ValueHaving having;
 }

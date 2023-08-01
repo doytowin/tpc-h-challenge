@@ -14,30 +14,31 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q11;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
+import win.doyto.query.annotation.CompositeView;
+import win.doyto.query.annotation.GroupBy;
+import win.doyto.tpchchallenge.domain.nation.NationEntity;
+import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
- * LineItemQuery
+ * ImportantStockIdentificationView
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/2/18
+ * @since 1.0.1
  */
 @Getter
 @Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+@CompositeView({PartSuppEntity.class, SupplierEntity.class, NationEntity.class})
+public class ImportantStockIdentificationView {
+    @GroupBy
+    private Integer ps_partkey;
+    @Column(name = "SUM(ps_supplycost * ps_availqty)")
+    private BigDecimal val;
 }

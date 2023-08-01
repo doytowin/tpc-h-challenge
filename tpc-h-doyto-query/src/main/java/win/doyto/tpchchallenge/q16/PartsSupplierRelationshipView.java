@@ -14,30 +14,33 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q16;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
+import win.doyto.query.annotation.CompositeView;
+import win.doyto.query.annotation.GroupBy;
+import win.doyto.tpchchallenge.domain.part.PartEntity;
+import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.persistence.Column;
 
 /**
- * LineItemQuery
+ * PartsSupplierRelationshipView
  *
  * @author f0rb on 2023/2/19
+ * @since 1.0.1
  */
 @Getter
 @Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+@CompositeView({PartSuppEntity.class, PartEntity.class})
+public class PartsSupplierRelationshipView {
+    @GroupBy
+    private String p_brand;
+    @GroupBy
+    private String p_type;
+    @GroupBy
+    private Integer p_size;
+    @Column(name = "COUNT(DISTINCT ps_suppkey)")
+    private Integer supplier_cnt;
 }

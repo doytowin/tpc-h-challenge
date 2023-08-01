@@ -14,30 +14,36 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q16;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import win.doyto.query.annotation.Subquery;
+import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierQuery;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
 /**
- * LineItemQuery
+ * PartsSupplierRelationshipQuery
  *
  * @author f0rb on 2023/2/19
+ * @since 1.0.1
  */
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+public class PartsSupplierRelationshipQuery extends PageQuery implements AggregationQuery {
+    private String p_brandNot;
+    private String p_typeNotStart;
+    private List<Integer> p_sizeIn;
+    @Subquery(select = "s_suppkey", from = SupplierEntity.class)
+    private SupplierQuery ps_suppkeyNotIn;
 }

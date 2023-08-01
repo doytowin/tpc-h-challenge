@@ -14,44 +14,31 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.q10;
+package win.doyto.tpchchallenge.q12;
 
 import lombok.Getter;
 import lombok.Setter;
 import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
-import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
-import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.orders.OrdersEntity;
 
 import javax.persistence.Column;
-import java.math.BigDecimal;
 
 /**
- * ReturnedItemReportingView
+ * ShippingModesAndOrderPriorityView
  *
  * @author f0rb on 2023/2/18
  * @since 1.0.1
  */
 @Getter
 @Setter
-@CompositeView({CustomerEntity.class, OrdersEntity.class, LineItemEntity.class, NationEntity.class})
-public class ReturnedItemReportingView {
+@CompositeView({OrdersEntity.class, LineItemEntity.class})
+public class ShippingModesAndOrderPriorityView {
     @GroupBy
-    private Integer c_custkey;
-    @GroupBy
-    private String c_name;
-    @Column(name = "SUM(l_extendedprice * (1 - l_discount))")
-    private BigDecimal revenue;
-    @GroupBy
-    private BigDecimal c_acctbal;
-    @GroupBy
-    private String n_name;
-    @GroupBy
-    private String c_address;
-    @GroupBy
-    private String c_phone;
-    @GroupBy
-    private String c_comment;
+    private String l_shipmode;
+    @Column(name = "SUM(CASE WHEN o_orderpriority = #{o_orderpriority1} OR o_orderpriority = #{o_orderpriority2} THEN 1 ELSE 0 END)")
+    private Integer high_line_count;
+    @Column(name = "SUM(CASE WHEN o_orderpriority <> #{o_orderpriority1} AND o_orderpriority <> #{o_orderpriority2} THEN 1 ELSE 0 END)")
+    private Integer low_line_count;
 }

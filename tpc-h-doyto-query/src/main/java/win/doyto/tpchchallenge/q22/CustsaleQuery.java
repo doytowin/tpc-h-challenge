@@ -14,30 +14,40 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q22;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import win.doyto.query.annotation.DomainPath;
+import win.doyto.query.annotation.Subquery;
 import win.doyto.query.core.PageQuery;
+import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import javax.persistence.Column;
+import java.util.List;
 
 /**
- * LineItemQuery
+ * CustsaleQuery
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/7/13
+ * @since 1.0.2
  */
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+public class CustsaleQuery extends PageQuery {
+    private Integer c_acctbalGt;
+    @Column(name = "substring(c_phone from 1 for 2)")
+    private List<String> cntrycodeIn;
+    @Subquery(select = "avg(c_acctbal)", from = CustomerEntity.class)
+    private CustsaleQuery c_acctbalGt2;
+    @DomainPath(value = "orders",
+            localAlias = "", localField = "c_custkey",
+            foreignAlias = "", foreignField = "o_custkey")
+    private PageQuery ordersNotExists;
 }

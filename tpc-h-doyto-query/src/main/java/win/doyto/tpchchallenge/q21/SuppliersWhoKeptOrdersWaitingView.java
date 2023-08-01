@@ -14,44 +14,34 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.q10;
+package win.doyto.tpchchallenge.q21;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
-import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.orders.OrdersEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
 import javax.persistence.Column;
-import java.math.BigDecimal;
 
 /**
- * ReturnedItemReportingView
+ * SuppliersWhoKeptOrdersWaitingView
  *
- * @author f0rb on 2023/2/18
- * @since 1.0.1
+ * @author f0rb on 2023/7/13
+ * @since 1.0.2
  */
 @Getter
 @Setter
-@CompositeView({CustomerEntity.class, OrdersEntity.class, LineItemEntity.class, NationEntity.class})
-public class ReturnedItemReportingView {
+@View(SupplierEntity.class)
+@View(value = LineItemEntity.class, alias = "l1")
+@View(OrdersEntity.class)
+@View(NationEntity.class)
+public class SuppliersWhoKeptOrdersWaitingView {
     @GroupBy
-    private Integer c_custkey;
-    @GroupBy
-    private String c_name;
-    @Column(name = "SUM(l_extendedprice * (1 - l_discount))")
-    private BigDecimal revenue;
-    @GroupBy
-    private BigDecimal c_acctbal;
-    @GroupBy
-    private String n_name;
-    @GroupBy
-    private String c_address;
-    @GroupBy
-    private String c_phone;
-    @GroupBy
-    private String c_comment;
+    private String s_name;
+    @Column(name = "count(*)")
+    private Long numwait;
 }

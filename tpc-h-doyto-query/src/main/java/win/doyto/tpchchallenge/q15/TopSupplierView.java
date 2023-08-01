@@ -14,30 +14,29 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q15;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
-
-import java.math.BigDecimal;
-import java.util.Date;
+import win.doyto.query.annotation.View;
+import win.doyto.query.annotation.With;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
 /**
- * LineItemQuery
+ * TopSupplierView
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/6/13
+ * @since 1.0.2
  */
 @Getter
 @Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+@View(SupplierEntity.class)
+@View(RevenueView.class)
+@With(RevenueView.class)
+public class TopSupplierView {
+    private Integer s_suppkey;
+    private String s_name;
+    private String s_address;
+    private String s_phone;
+    private Double total_revenue;
 }

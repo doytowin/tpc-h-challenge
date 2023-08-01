@@ -14,30 +14,34 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.domain.lineitem;
+package win.doyto.tpchchallenge.q15;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
+import win.doyto.query.annotation.ForeignKey;
+import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
+import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
- * LineItemQuery
+ * LineItemView
  *
- * @author f0rb on 2023/2/19
+ * @author f0rb on 2023/6/13
+ * @since 1.0.2
  */
 @Getter
 @Setter
-@SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
-public class LineItemQuery extends PageQuery {
-    private BigDecimal l_discountGt;
-    private Date l_shipdateGe;
-    private Date l_shipdateLt;
+@View(LineItemEntity.class)
+public class LineItemRevenueView {
+    @ForeignKey(entity = SupplierEntity.class, field = "s_suppkey")
+    @GroupBy
+    @Column(name = "l_suppkey")
+    private Integer supplier_no;
+    @Column(name = "SUM(l_extendedprice * (1 - l_discount))")
+    private BigDecimal total_revenue;
 }
+
