@@ -18,7 +18,7 @@ package win.doyto.tpchchallenge.q9;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.orders.OrdersEntity;
@@ -37,7 +37,12 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@CompositeView({PartEntity.class, SupplierEntity.class, LineItemEntity.class, PartSuppEntity.class, OrdersEntity.class, NationEntity.class})
+@View(PartEntity.class)
+@View(SupplierEntity.class)
+@View(LineItemEntity.class)
+@View(PartSuppEntity.class)
+@View(OrdersEntity.class)
+@View(NationEntity.class)
 public class ProfitView {
     @Column(name = "n_name")
     private String nation;

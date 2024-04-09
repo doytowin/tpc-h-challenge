@@ -18,7 +18,7 @@ package win.doyto.tpchchallenge.q17;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 import win.doyto.tpchchallenge.domain.part.PartEntity;
 
@@ -33,7 +33,8 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@CompositeView({LineItemEntity.class, PartEntity.class})
+@View(LineItemEntity.class)
+@View(PartEntity.class)
 public class SmallQuantityOrderRevenueView {
     @Column(name = "SUM(l_extendedprice) / 7.0")
     private BigDecimal avg_yearly;

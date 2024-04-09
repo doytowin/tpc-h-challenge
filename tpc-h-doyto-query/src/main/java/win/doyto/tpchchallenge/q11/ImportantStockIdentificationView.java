@@ -18,8 +18,8 @@ package win.doyto.tpchchallenge.q11;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
 import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
@@ -35,7 +35,9 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@CompositeView({PartSuppEntity.class, SupplierEntity.class, NationEntity.class})
+@View(PartSuppEntity.class)
+@View(SupplierEntity.class)
+@View(NationEntity.class)
 public class ImportantStockIdentificationView {
     @GroupBy
     private Integer ps_partkey;

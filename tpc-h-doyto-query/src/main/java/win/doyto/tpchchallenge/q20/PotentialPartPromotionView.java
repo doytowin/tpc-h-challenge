@@ -18,7 +18,7 @@ package win.doyto.tpchchallenge.q20;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
@@ -30,7 +30,8 @@ import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
  */
 @Getter
 @Setter
-@CompositeView({SupplierEntity.class, NationEntity.class})
+@View(SupplierEntity.class)
+@View(NationEntity.class)
 public class PotentialPartPromotionView {
     private String s_name;
     private String s_address;

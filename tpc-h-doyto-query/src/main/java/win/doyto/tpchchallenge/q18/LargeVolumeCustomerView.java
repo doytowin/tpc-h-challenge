@@ -18,8 +18,8 @@ package win.doyto.tpchchallenge.q18;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 import win.doyto.tpchchallenge.domain.orders.OrdersEntity;
@@ -35,7 +35,9 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@CompositeView({CustomerEntity.class, OrdersEntity.class, LineItemEntity.class})
+@View(CustomerEntity.class)
+@View(OrdersEntity.class)
+@View(LineItemEntity.class)
 public class LargeVolumeCustomerView {
     @GroupBy
     private String c_name;

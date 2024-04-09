@@ -18,8 +18,8 @@ package win.doyto.tpchchallenge.q1;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 
 import javax.persistence.Column;
@@ -32,7 +32,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@CompositeView(LineItemEntity.class)
+@View(LineItemEntity.class)
 public class PricingSummaryView {
     @GroupBy
     private String l_returnflag;

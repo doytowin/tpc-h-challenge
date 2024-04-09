@@ -18,8 +18,8 @@ package win.doyto.tpchchallenge.q5;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
 import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.customer.CustomerEntity;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
@@ -38,7 +38,12 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@CompositeView({CustomerEntity.class, OrdersEntity.class, LineItemEntity.class, SupplierEntity.class, NationEntity.class, RegionEntity.class})
+@View(CustomerEntity.class)
+@View(OrdersEntity.class)
+@View(LineItemEntity.class)
+@View(SupplierEntity.class)
+@View(NationEntity.class)
+@View(RegionEntity.class)
 public class LocalSupplierVolumeView {
     @GroupBy
     private String n_name;

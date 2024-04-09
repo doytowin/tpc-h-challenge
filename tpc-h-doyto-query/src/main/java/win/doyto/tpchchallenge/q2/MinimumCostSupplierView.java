@@ -18,7 +18,7 @@ package win.doyto.tpchchallenge.q2;
 
 import lombok.Getter;
 import lombok.Setter;
-import win.doyto.query.annotation.CompositeView;
+import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.nation.NationEntity;
 import win.doyto.tpchchallenge.domain.part.PartEntity;
 import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
@@ -35,7 +35,11 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@CompositeView({PartEntity.class, SupplierEntity.class, PartSuppEntity.class, NationEntity.class, RegionEntity.class})
+@View(PartEntity.class)
+@View(SupplierEntity.class)
+@View(PartSuppEntity.class)
+@View(NationEntity.class)
+@View(RegionEntity.class)
 public class MinimumCostSupplierView {
     private BigDecimal s_acctbal;
     private String s_name;
