@@ -13,7 +13,7 @@
     <artifactId>tpc-h-doyto-query</artifactId>
 
     <properties>
-        <doyto-query.version>1.0.2</doyto-query.version>
+        <doyto-query.version>1.0.4-SNAPSHOT</doyto-query.version>
     </properties>
 
     <dependencies>
@@ -31,6 +31,11 @@
         <dependency>
             <groupId>win.doyto</groupId>
             <artifactId>doyto-query-jdbc</artifactId>
+            <version>${doyto-query.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>win.doyto</groupId>
+            <artifactId>doyto-query-dialect</artifactId>
             <version>${doyto-query.version}</version>
         </dependency>
         <dependency>
@@ -55,6 +60,25 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>1.37</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>1.37</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

@@ -1,0 +1,16 @@
+#server:
+#  port: 0
+
+spring:
+  main:
+    web-application-type: none
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tpch?characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: root
+
+doyto:
+  query:
+    config:
+      dialect: win.doyto.query.dialect.MySQL8Dialect
