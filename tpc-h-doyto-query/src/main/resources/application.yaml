@@ -1,7 +1,7 @@
 logging:
   level:
     root: info
-    win.doyto.query.sql: debug
+#    win.doyto.query.sql: debug
 #    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: trace
 
 doyto:
@@ -12,5 +12,3 @@ doyto:
 spring:
   datasource:
     url: "jdbc:h2:mem:tpch;MODE=MySQL"
-  profiles:
-    active: mysql8

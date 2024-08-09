@@ -66,7 +66,7 @@ public class TpcHBenchmark {
     public void init() {
         benchMark = true;
         // 这里的WebApplication.class是项目里的spring boot启动类
-        context = SpringApplication.run(TpcHBenchmarkApp.class);
+        context = SpringApplication.run(TpcHBenchmarkApp.class, "--spring.profiles.active=mysql8");
         dataQueryClient = context.getBean(DataQueryClient.class);
         jdbcTpcHService = context.getBean(JdbcTpcHService.class);
     }
