@@ -1,0 +1,9 @@
+version: '3'
+services:
+  mysql:
+    restart: always
+    image: ghcr.io/doytowin/tpch-image-mysql8:main
+    build: tpc-h-data
+    container_name: mysql8
+    ports:
+      - 3307:3306
