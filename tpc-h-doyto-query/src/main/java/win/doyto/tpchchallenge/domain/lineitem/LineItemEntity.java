@@ -20,11 +20,12 @@ import lombok.Getter;
 import lombok.Setter;
 import win.doyto.query.annotation.ForeignKey;
 import win.doyto.tpchchallenge.domain.part.PartEntity;
+import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
 import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
+import javax.persistence.Entity;
 import java.math.BigDecimal;
 import java.sql.Date;
-import javax.persistence.Entity;
 
 /**
  * LineItemEntity
@@ -35,9 +36,11 @@ import javax.persistence.Entity;
 @Setter
 @Entity(name = "lineitem")
 public class LineItemEntity extends LineItemKey {
+    @ForeignKey(entity = PartSuppEntity.class, field = "ps_suppkey")
     @ForeignKey(entity = SupplierEntity.class, field = "s_suppkey")
     private Integer l_suppkey;
 
+    @ForeignKey(entity = PartSuppEntity.class, field = "ps_partkey")
     @ForeignKey(entity = PartEntity.class, field = "p_partkey")
     private Integer l_partkey;
 

@@ -67,7 +67,7 @@ import win.doyto.tpchchallenge.q7.VolumeShippingView;
 import win.doyto.tpchchallenge.q8.AllNationsQuery;
 import win.doyto.tpchchallenge.q8.NationalMarketShareQuery;
 import win.doyto.tpchchallenge.q8.NationalMarketShareView;
-import win.doyto.tpchchallenge.q9.ProductTypeProfitMeasureQuery;
+import win.doyto.tpchchallenge.q9.ProductTypeProfitMeasureHaving;
 import win.doyto.tpchchallenge.q9.ProductTypeProfitMeasureView;
 import win.doyto.tpchchallenge.q9.ProfitQuery;
 
@@ -78,8 +78,6 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.time.temporal.ChronoUnit.MONTHS;
-import static java.time.temporal.ChronoUnit.YEARS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -161,7 +159,7 @@ class TpcHTest {
     void q4OrderPriorityCheckingQuery() {
         LocalDate date = LocalDate.of(1993, 7, 1);
         Date orderDateGe = Date.valueOf(date);
-        Date orderDateLt = Date.valueOf(date.plus(3, MONTHS));
+        Date orderDateLt = Date.valueOf(date.plusMonths(3));
         OrderPriorityCheckingQuery query = OrderPriorityCheckingQuery
                 .builder()
                 .o_orderdateGe(orderDateGe)
@@ -183,7 +181,7 @@ class TpcHTest {
     void q5LocalSupplierVolumeQuery() {
         LocalDate date = LocalDate.of(1994, 1, 1);
         Date orderDateGe = Date.valueOf(date);
-        Date orderDateLt = Date.valueOf(date.plus(1, YEARS));
+        Date orderDateLt = Date.valueOf(date.plusYears(1));
         LocalSupplierVolumeQuery query = LocalSupplierVolumeQuery
                 .builder()
                 .r_name("ASIA")
@@ -269,17 +267,14 @@ class TpcHTest {
     @Test
     void q9ProductTypeProfitMeasureQuery() {
         ProfitQuery profitQuery = ProfitQuery.builder().p_nameLike("green").build();
-        ProductTypeProfitMeasureQuery query = ProductTypeProfitMeasureQuery
-                .builder()
-                .profitQuery(profitQuery)
-                .sort("nation;o_year,DESC")
-                .build();
+        ProductTypeProfitMeasureHaving having = ProductTypeProfitMeasureHaving
+                .builder().profitQuery(profitQuery).sort("nation;o_year,DESC").build();
 
-        List<ProductTypeProfitMeasureView> list = dataQueryClient.aggregate(query, ProductTypeProfitMeasureView.class);
+        List<ProductTypeProfitMeasureView> list = dataQueryClient.aggregate(having, ProductTypeProfitMeasureView.class);
 
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                         .extracting("nation", "o_year", "sum_profit")
-                        .containsExactly(Tuple.tuple("GERMANY", "1994", BigDecimal.valueOf(1329820.6856)));
+                        .containsExactly(Tuple.tuple("GERMANY", "1994", BigDecimal.valueOf(1460.6744)));
     }
 
     @Test
@@ -289,7 +284,7 @@ class TpcHTest {
         ReturnedItemReportingQuery query = ReturnedItemReportingQuery
                 .builder()
                 .o_orderdateGe(Date.valueOf(date))
-                .o_orderdateLt(Date.valueOf(date.plus(12, MONTHS)))
+                .o_orderdateLt(Date.valueOf(date.plusMonths(12)))
                 .l_returnflag("R")
                 .sort("revenue,DESC")
                 .build();
@@ -337,7 +332,7 @@ class TpcHTest {
                 .o_orderpriority2("2-HIGH")
                 .l_shipmodeIn(Arrays.asList("RAIL", "SHIP"))
                 .l_receiptdateGe(Date.valueOf(date))
-                .l_receiptdateLt(Date.valueOf(date.plus(1, YEARS)))
+                .l_receiptdateLt(Date.valueOf(date.plusYears(1)))
                 .sort("l_shipmode")
                 .build();
 
@@ -522,7 +517,7 @@ class TpcHTest {
         AvailableQtyQuery availableQtyQuery = AvailableQtyQuery
                 .builder()
                 .l_shipdateGe(Date.valueOf(date))
-                .l_shipdateLt(Date.valueOf(date.plus(1, YEARS)))
+                .l_shipdateLt(Date.valueOf(date.plusYears(1)))
                 .build();
 
         SuppkeyQuery suppkeyQuery = SuppkeyQuery
