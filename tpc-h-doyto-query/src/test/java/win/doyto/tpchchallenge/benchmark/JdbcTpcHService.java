@@ -12,6 +12,7 @@ import win.doyto.tpchchallenge.q3.ShippingPriorityQuery;
 import win.doyto.tpchchallenge.q3.ShippingPriorityView;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingQuery;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingView;
+import win.doyto.tpchchallenge.q5.LocalSupplierVolumeQuery;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -122,5 +123,25 @@ public class JdbcTpcHService {
                 " GROUP BY o_orderpriority" +
                 " ORDER BY o_orderpriority";
         return jdbcTemplate.query(sql, rowMapper, query.getO_orderdateGe(), query.getO_orderdateLt());
+    }
+
+    public List<ShippingPriorityView> aggregate(LocalSupplierVolumeQuery query, Class<ShippingPriorityView> viewClass) {
+        RowMapper<ShippingPriorityView> rowMapper = (RowMapper<ShippingPriorityView>)
+                holder.computeIfAbsent(viewClass, BeanPropertyRowMapper::new);
+        String sql = "SELECT n_name, SUM(l_extendedprice * (1 - l_discount)) AS revenue" +
+                " FROM customer, orders, lineitem, supplier, nation, region" +
+                " WHERE c_nationkey = n_nationkey" +
+                " AND o_custkey = c_custkey" +
+                " AND l_orderkey = o_orderkey" +
+                " AND l_suppkey = s_suppkey" +
+                " AND s_nationkey = n_nationkey" +
+                " AND n_regionkey = r_regionkey" +
+                " AND r_name = ?" +
+                " AND o_orderdate >= ?" +
+                " AND o_orderdate < ?" +
+                " GROUP BY n_name" +
+                " ORDER BY revenue DESC";
+
+        return jdbcTemplate.query(sql, rowMapper, query.getR_name(), query.getO_orderdateGe(), query.getO_orderdateLt());
     }
 }

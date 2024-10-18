@@ -21,6 +21,8 @@ import win.doyto.tpchchallenge.q3.ShippingPriorityView;
 import win.doyto.tpchchallenge.q4.LineItemReceiptQuery;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingQuery;
 import win.doyto.tpchchallenge.q4.OrderPriorityCheckingView;
+import win.doyto.tpchchallenge.q5.LocalSupplierVolumeQuery;
+import win.doyto.tpchchallenge.q5.LocalSupplierVolumeView;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -255,5 +257,45 @@ public class TpcHBenchmark {
                                 Tuple.tuple("1-URGENT", 1),
                                 Tuple.tuple("3-MEDIUM", 1)
                         );
+    }
+
+    @Test
+    @Benchmark
+    public void q5LocalSupplierVolumeQuery() {
+        LocalDate date = LocalDate.of(1994, 1, 1);
+        Date orderDateGe = Date.valueOf(date);
+        Date orderDateLt = Date.valueOf(date.plusYears(1));
+        LocalSupplierVolumeQuery query = LocalSupplierVolumeQuery
+                .builder()
+                .r_name("ASIA")
+                .o_orderdateGe(orderDateGe)
+                .o_orderdateLt(orderDateLt)
+                .sort("revenue,DESC")
+                .build();
+
+        List<LocalSupplierVolumeView> list = dataQueryClient.aggregate(query, LocalSupplierVolumeView.class);
+
+        if (benchMark) return;
+        assertThat(list).isEmpty();
+    }
+
+    @Test
+    @Benchmark
+    public void q5LocalSupplierVolumeQueryJdbc() {
+        LocalDate date = LocalDate.of(1994, 1, 1);
+        Date orderDateGe = Date.valueOf(date);
+        Date orderDateLt = Date.valueOf(date.plusYears(1));
+        LocalSupplierVolumeQuery query = LocalSupplierVolumeQuery
+                .builder()
+                .r_name("ASIA")
+                .o_orderdateGe(orderDateGe)
+                .o_orderdateLt(orderDateLt)
+                .sort("revenue,DESC")
+                .build();
+
+        List<ShippingPriorityView> list = jdbcTpcHService.aggregate(query, ShippingPriorityView.class);
+
+        if (benchMark) return;
+        assertThat(list).isEmpty();
     }
 }
