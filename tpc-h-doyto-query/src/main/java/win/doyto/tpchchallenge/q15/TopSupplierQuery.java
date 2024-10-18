@@ -38,7 +38,7 @@ import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopSupplierQuery extends PageQuery implements AggregationQuery {
-    private LineItemQuery lineItemRevenueQuery;
+    private LineItemQuery revenueQuery;
     @Subquery(select = "MAX(total_revenue)", from = RevenueView.class)
     private PageQuery total_revenue;
 }

@@ -16,12 +16,32 @@
 
 package win.doyto.tpchchallenge.q15;
 
+import lombok.Getter;
+import lombok.Setter;
+import win.doyto.query.annotation.ForeignKey;
+import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
+import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
+
+import javax.persistence.Column;
+import java.math.BigDecimal;
+
 /**
  * RevenueView
  *
  * @author f0rb on 2023/6/13
  * @since 1.0.2
  */
-class RevenueView extends LineItemRevenueView {
-}
 
+@Getter
+@Setter
+@View(LineItemEntity.class)
+public class RevenueView {
+    @ForeignKey(entity = SupplierEntity.class, field = "s_suppkey")
+    @GroupBy
+    @Column(name = "l_suppkey")
+    private Integer supplier_no;
+    @Column(name = "SUM(l_extendedprice * (1 - l_discount))")
+    private BigDecimal total_revenue;
+}

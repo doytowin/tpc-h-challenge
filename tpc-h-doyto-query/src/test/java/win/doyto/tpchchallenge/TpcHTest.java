@@ -395,7 +395,7 @@ class TpcHTest {
                 .build();
         TopSupplierQuery query = TopSupplierQuery
                 .builder()
-                .lineItemRevenueQuery(lineitemQuery)
+                .revenueQuery(lineitemQuery)
                 .total_revenue(new PageQuery())
                 .sort("s_suppkey")
                 .build();

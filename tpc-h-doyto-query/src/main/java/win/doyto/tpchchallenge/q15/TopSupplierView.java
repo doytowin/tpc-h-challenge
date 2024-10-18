@@ -19,7 +19,7 @@ package win.doyto.tpchchallenge.q15;
 import lombok.Getter;
 import lombok.Setter;
 import win.doyto.query.annotation.View;
-import win.doyto.query.annotation.With;
+import win.doyto.query.annotation.ViewType;
 import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
 /**
@@ -31,8 +31,7 @@ import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 @Getter
 @Setter
 @View(SupplierEntity.class)
-@View(RevenueView.class)
-@With(RevenueView.class)
+@View(value = RevenueView.class, type = ViewType.WITH)
 public class TopSupplierView {
     private Integer s_suppkey;
     private String s_name;

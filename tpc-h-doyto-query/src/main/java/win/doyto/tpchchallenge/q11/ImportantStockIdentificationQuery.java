@@ -24,6 +24,8 @@ import lombok.experimental.SuperBuilder;
 import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
+import javax.persistence.Transient;
+
 /**
  * ImportantStockIdentificationQuery
  *
@@ -37,5 +39,6 @@ import win.doyto.query.core.PageQuery;
 @AllArgsConstructor
 public class ImportantStockIdentificationQuery extends PageQuery implements AggregationQuery {
     private String n_name;
+    @Transient
     private ValueHaving having;
 }

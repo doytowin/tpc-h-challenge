@@ -24,6 +24,8 @@ import lombok.experimental.SuperBuilder;
 import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
+import javax.persistence.Transient;
+
 /**
  * LineItemQuantityQuery
  *
@@ -36,5 +38,6 @@ import win.doyto.query.core.PageQuery;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LineItemQuantityQuery extends PageQuery implements AggregationQuery {
+    @Transient
     private LineItemQuantityHaving having;
 }
