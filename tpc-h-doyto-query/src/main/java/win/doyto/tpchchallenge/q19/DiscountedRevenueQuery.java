@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import java.util.List;
@@ -37,7 +36,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DiscountedRevenueQuery extends PageQuery implements AggregationQuery {
+public class DiscountedRevenueQuery extends PageQuery {
     private List<LineItemFilter> lineitemOr;
     private String l_shipinstruct;
 }

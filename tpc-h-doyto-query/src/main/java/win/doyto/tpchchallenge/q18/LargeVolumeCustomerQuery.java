@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 
@@ -37,7 +36,7 @@ import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LargeVolumeCustomerQuery extends PageQuery implements AggregationQuery {
+public class LargeVolumeCustomerQuery extends PageQuery {
     @Subquery(select = "l_orderkey", distinct = true, from = LineItemEntity.class)
-    private LineItemQuantityQuery o_orderkeyIn;
+    private LineItemQuantityHaving o_orderkeyIn;
 }

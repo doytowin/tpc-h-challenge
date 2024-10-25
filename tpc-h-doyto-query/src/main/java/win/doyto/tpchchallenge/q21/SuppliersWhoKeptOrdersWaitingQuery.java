@@ -19,7 +19,6 @@ package win.doyto.tpchchallenge.q21;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.DomainPath;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 /**
@@ -33,7 +32,7 @@ import win.doyto.query.core.PageQuery;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuppliersWhoKeptOrdersWaitingQuery extends PageQuery implements AggregationQuery {
+public class SuppliersWhoKeptOrdersWaitingQuery extends PageQuery {
     private String n_name;
     private String o_orderstatus;
     @Builder.Default

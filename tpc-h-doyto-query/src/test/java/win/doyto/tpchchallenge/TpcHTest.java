@@ -4,6 +4,7 @@ import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguratio
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import win.doyto.query.core.AggregateClient;
 import win.doyto.query.core.DataQueryClient;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
@@ -34,7 +35,6 @@ import win.doyto.tpchchallenge.q17.SmallQuantityOrderRevenueView;
 import win.doyto.tpchchallenge.q18.LargeVolumeCustomerQuery;
 import win.doyto.tpchchallenge.q18.LargeVolumeCustomerView;
 import win.doyto.tpchchallenge.q18.LineItemQuantityHaving;
-import win.doyto.tpchchallenge.q18.LineItemQuantityQuery;
 import win.doyto.tpchchallenge.q19.DiscountedRevenueQuery;
 import win.doyto.tpchchallenge.q19.DiscountedRevenueView;
 import win.doyto.tpchchallenge.q19.LineItemFilter;
@@ -94,6 +94,9 @@ class TpcHTest {
     @Resource
     private DataQueryClient dataQueryClient;
 
+    @Resource
+    private AggregateClient aggregateClient;
+
     @Test
     void q1PricingSummaryReportQuery() {
         Date date = Date.valueOf(LocalDate.of(1998, 9, 1));
@@ -103,7 +106,7 @@ class TpcHTest {
                 .sort("l_returnflag;l_linestatus")
                 .build();
 
-        List<PricingSummaryView> list = dataQueryClient.aggregate(query, PricingSummaryView.class);
+        List<PricingSummaryView> list = aggregateClient.query(PricingSummaryView.class, query);
 
         assertThat(list).hasSize(3);
         assertThat(list).extracting("l_returnflag", "l_linestatus", "avg_disc")
@@ -126,7 +129,7 @@ class TpcHTest {
                 .sort("s_acctbal,DESC;n_name;s_name;p_partkey")
                 .build();
 
-        List<MinimumCostSupplierView> list = dataQueryClient.aggregate(query, MinimumCostSupplierView.class);
+        List<MinimumCostSupplierView> list = aggregateClient.query(MinimumCostSupplierView.class, query);
 
         assertThat(list).hasSize(2);
         assertThat(list).extracting("s_acctbal", "s_name", "n_name")
@@ -147,7 +150,7 @@ class TpcHTest {
                 .sort("revenue,DESC;o_orderdate")
                 .build();
 
-        List<ShippingPriorityView> list = dataQueryClient.aggregate(query, ShippingPriorityView.class);
+        List<ShippingPriorityView> list = aggregateClient.query(ShippingPriorityView.class, query);
 
         assertThat(list).extracting("l_orderkey", "revenue", "o_shippriority")
                         .containsExactly(
@@ -168,7 +171,7 @@ class TpcHTest {
                 .sort("o_orderpriority")
                 .build();
 
-        List<OrderPriorityCheckingView> list = dataQueryClient.aggregate(query, OrderPriorityCheckingView.class);
+        List<OrderPriorityCheckingView> list = aggregateClient.query(OrderPriorityCheckingView.class, query);
 
         assertThat(list).extracting("o_orderpriority", "order_count")
                         .containsExactly(
@@ -190,7 +193,7 @@ class TpcHTest {
                 .sort("revenue,DESC")
                 .build();
 
-        List<LocalSupplierVolumeView> list = dataQueryClient.aggregate(query, LocalSupplierVolumeView.class);
+        List<LocalSupplierVolumeView> list = aggregateClient.query(LocalSupplierVolumeView.class, query);
 
         assertThat(list).isEmpty();
     }
@@ -203,7 +206,7 @@ class TpcHTest {
         query.setBaseDiscount(BigDecimal.valueOf(0.03));
         query.setL_quantityLt(31);
 
-        List<ForecastingRevenueChangeView> list = dataQueryClient.aggregate(query, ForecastingRevenueChangeView.class);
+        List<ForecastingRevenueChangeView> list = aggregateClient.query(ForecastingRevenueChangeView.class, query);
 
         assertThat(list).extracting("revenue")
                         .containsExactly(BigDecimal.valueOf(745.6876));
@@ -229,7 +232,7 @@ class TpcHTest {
                 .sort("supp_nation;cust_nation;l_year")
                 .build();
 
-        List<VolumeShippingView> list = dataQueryClient.aggregate(query, VolumeShippingView.class);
+        List<VolumeShippingView> list = aggregateClient.query(VolumeShippingView.class, query);
 
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                         .extracting("supp_nation", "cust_nation", "revenue")
@@ -257,7 +260,7 @@ class TpcHTest {
                 .allNationsQuery(allNationsQuery).sort("o_year")
                 .build();
 
-        List<NationalMarketShareView> list = dataQueryClient.aggregate(query, NationalMarketShareView.class);
+        List<NationalMarketShareView> list = aggregateClient.query(NationalMarketShareView.class, query);
 
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                         .extracting("o_year", "mkt_share")
@@ -270,7 +273,7 @@ class TpcHTest {
         ProductTypeProfitMeasureHaving having = ProductTypeProfitMeasureHaving
                 .builder().profitQuery(profitQuery).sort("nation;o_year,DESC").build();
 
-        List<ProductTypeProfitMeasureView> list = dataQueryClient.aggregate(having, ProductTypeProfitMeasureView.class);
+        List<ProductTypeProfitMeasureView> list = aggregateClient.query(ProductTypeProfitMeasureView.class, having);
 
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                         .extracting("nation", "o_year", "sum_profit")
@@ -289,7 +292,7 @@ class TpcHTest {
                 .sort("revenue,DESC")
                 .build();
 
-        List<ReturnedItemReportingView> list = dataQueryClient.aggregate(query, ReturnedItemReportingView.class);
+        List<ReturnedItemReportingView> list = aggregateClient.query(ReturnedItemReportingView.class, query);
 
         assertThat(list).usingRecursiveFieldByFieldElementComparator(configuration)
                         .extracting("c_custkey", "c_name", "revenue", "n_name")
@@ -314,7 +317,7 @@ class TpcHTest {
                 .sort("val,DESC")
                 .build();
 
-        List<ImportantStockIdentificationView> list = dataQueryClient.aggregate(query, ImportantStockIdentificationView.class);
+        List<ImportantStockIdentificationView> list = aggregateClient.query(ImportantStockIdentificationView.class, query);
 
         assertThat(list).hasSize(50)
                         .usingRecursiveFieldByFieldElementComparator(configuration)
@@ -336,7 +339,7 @@ class TpcHTest {
                 .sort("l_shipmode")
                 .build();
 
-        List<ShippingModesAndOrderPriorityView> list = dataQueryClient.aggregate(query, ShippingModesAndOrderPriorityView.class);
+        List<ShippingModesAndOrderPriorityView> list = aggregateClient.query(ShippingModesAndOrderPriorityView.class, query);
 
         assertThat(list)
                 .usingRecursiveFieldByFieldElementComparator(configuration)
@@ -354,7 +357,7 @@ class TpcHTest {
                 .sort("custdist,DESC;c_count,DESC")
                 .build();
 
-        List<CustomerDistributionView> list = dataQueryClient.aggregate(query, CustomerDistributionView.class);
+        List<CustomerDistributionView> list = aggregateClient.query(CustomerDistributionView.class, query);
 
         assertThat(list).hasSize(29)
                         .first()
@@ -373,7 +376,7 @@ class TpcHTest {
                 .l_shipdateLt(endShipdate)
                 .build();
 
-        List<PromotionEffectView> list = dataQueryClient.aggregate(query, PromotionEffectView.class);
+        List<PromotionEffectView> list = aggregateClient.query(PromotionEffectView.class, query);
 
         assertThat(list).extracting("promo_revenue")
                         .containsExactly(100);
@@ -395,7 +398,7 @@ class TpcHTest {
                 .sort("s_suppkey")
                 .build();
 
-        List<TopSupplierView> list = dataQueryClient.aggregate(query, TopSupplierView.class);
+        List<TopSupplierView> list = aggregateClient.query(TopSupplierView.class, query);
 
         assertThat(list).extracting("s_suppkey", "s_name", "total_revenue")
                         .containsExactly(Tuple.tuple(508, "Supplier#000000508", 60072.1000));
@@ -412,7 +415,7 @@ class TpcHTest {
                 .sort("supplier_cnt,DESC;p_brand;p_type;p_size")
                 .build();
 
-        List<PartsSupplierRelationshipView> list = dataQueryClient.aggregate(query, PartsSupplierRelationshipView.class);
+        List<PartsSupplierRelationshipView> list = aggregateClient.query(PartsSupplierRelationshipView.class, query);
 
         assertThat(list).hasSize(136)
                         .extracting("p_brand", "p_type", "p_size", "supplier_cnt")
@@ -434,7 +437,7 @@ class TpcHTest {
                 .l_quantityLt(LineItemQuery.builder().build())
                 .build();
 
-        List<SmallQuantityOrderRevenueView> list = dataQueryClient.aggregate(query, SmallQuantityOrderRevenueView.class);
+        List<SmallQuantityOrderRevenueView> list = aggregateClient.query(SmallQuantityOrderRevenueView.class, query);
 
         assertThat(list).extracting("avg_yearly")
                         .first().isNull();
@@ -442,17 +445,15 @@ class TpcHTest {
 
     @Test
     void q18LargeVolumeCustomerQuery() {
-        LineItemQuantityHaving lqHaving = LineItemQuantityHaving.builder()
-                                                                .sumL_quantityGt(40)
-                                                                .build();
-        LineItemQuantityQuery lqQuery = LineItemQuantityQuery.builder().having(lqHaving).build();
+        LineItemQuantityHaving lqHaving = LineItemQuantityHaving
+                .builder().sumL_quantityGt(40).build();
         LargeVolumeCustomerQuery query = LargeVolumeCustomerQuery
                 .builder()
-                .o_orderkeyIn(lqQuery)
+                .o_orderkeyIn(lqHaving)
                 .sort("o_totalprice,desc;o_orderdate")
                 .build();
 
-        List<LargeVolumeCustomerView> list = dataQueryClient.aggregate(query, LargeVolumeCustomerView.class);
+        List<LargeVolumeCustomerView> list = aggregateClient.query(LargeVolumeCustomerView.class, query);
 
         assertThat(list).extracting("c_name", "sumL_quantity")
                         .containsExactly(
@@ -502,7 +503,7 @@ class TpcHTest {
                 .l_shipinstruct("DELIVER IN PERSON")
                 .build();
 
-        List<DiscountedRevenueView> list = dataQueryClient.aggregate(query, DiscountedRevenueView.class);
+        List<DiscountedRevenueView> list = aggregateClient.query(DiscountedRevenueView.class, query);
 
         assertThat(list).extracting("revenue")
                         .containsExactly(31727.598);
@@ -532,7 +533,7 @@ class TpcHTest {
                 .sort("s_name")
                 .build();
 
-        List<PotentialPartPromotionView> list = dataQueryClient.aggregate(query, PotentialPartPromotionView.class);
+        List<PotentialPartPromotionView> list = aggregateClient.query(PotentialPartPromotionView.class, query);
 
         assertThat(list).extracting("s_name", "s_address")
                         .containsExactly(Tuple.tuple("Supplier#000000328", "SMm24d WG62"));
@@ -549,7 +550,7 @@ class TpcHTest {
                 .sort("numwait,DESC;s_name")
                 .build();
 
-        List<SuppliersWhoKeptOrdersWaitingView> list = dataQueryClient.aggregate(query, SuppliersWhoKeptOrdersWaitingView.class);
+        List<SuppliersWhoKeptOrdersWaitingView> list = aggregateClient.query(SuppliersWhoKeptOrdersWaitingView.class, query);
 
         assertThat(list).isEmpty();
     }
@@ -573,7 +574,7 @@ class TpcHTest {
                 .sort("cntrycode")
                 .build();
 
-        List<GlobalSalesOpportunityView> list = dataQueryClient.aggregate(query, GlobalSalesOpportunityView.class);
+        List<GlobalSalesOpportunityView> list = aggregateClient.query(GlobalSalesOpportunityView.class, query);
 
         assertThat(list).extracting("cntrycode", "numcust", "totacctbal")
                         .containsExactly(

@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 
@@ -37,7 +36,7 @@ import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TopSupplierQuery extends PageQuery implements AggregationQuery {
+public class TopSupplierQuery extends PageQuery {
     private LineItemQuery revenueQuery;
     @Subquery(select = "MAX(total_revenue)", from = RevenueView.class)
     private PageQuery total_revenue;

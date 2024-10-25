@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 import win.doyto.tpchchallenge.domain.supplier.SupplierQuery;
@@ -40,7 +39,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PartsSupplierRelationshipQuery extends PageQuery implements AggregationQuery {
+public class PartsSupplierRelationshipQuery extends PageQuery {
     private String p_brandNot;
     private String p_typeNotStart;
     private List<Integer> p_sizeIn;

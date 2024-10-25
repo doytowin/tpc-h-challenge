@@ -19,7 +19,8 @@ package win.doyto.tpchchallenge.q7;
 import lombok.Getter;
 import lombok.Setter;
 import win.doyto.query.annotation.GroupBy;
-import win.doyto.query.annotation.NestedView;
+import win.doyto.query.annotation.View;
+import win.doyto.query.annotation.ViewType;
 
 import javax.persistence.Column;
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
-@NestedView(ShippingView.class)
+@View(value = ShippingView.class, type = ViewType.NESTED)
 public class VolumeShippingView {
     @GroupBy
     private String supp_nation;

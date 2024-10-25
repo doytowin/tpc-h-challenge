@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.DomainPath;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import java.sql.Date;
@@ -38,7 +37,7 @@ import java.sql.Date;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderPriorityCheckingQuery extends PageQuery implements AggregationQuery {
+public class OrderPriorityCheckingQuery extends PageQuery {
     private Date o_orderdateGe;
     private Date o_orderdateLt;
 

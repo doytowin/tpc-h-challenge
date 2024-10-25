@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 /**
@@ -35,6 +34,6 @@ import win.doyto.query.core.PageQuery;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VolumeShippingQuery extends PageQuery implements AggregationQuery {
+public class VolumeShippingQuery extends PageQuery {
     private ShippingQuery shippingQuery;
 }

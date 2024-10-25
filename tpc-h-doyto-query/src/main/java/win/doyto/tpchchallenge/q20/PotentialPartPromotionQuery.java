@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
 
@@ -37,7 +36,7 @@ import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PotentialPartPromotionQuery extends PageQuery implements AggregationQuery {
+public class PotentialPartPromotionQuery extends PageQuery {
     @Subquery(select = "ps_suppkey", from = PartSuppEntity.class)
     private SuppkeyQuery s_suppkeyIn;
     private String n_name;

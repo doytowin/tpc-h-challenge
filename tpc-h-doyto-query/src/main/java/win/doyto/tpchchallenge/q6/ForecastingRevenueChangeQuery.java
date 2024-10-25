@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import java.math.BigDecimal;
@@ -40,7 +39,7 @@ import java.time.temporal.ChronoUnit;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ForecastingRevenueChangeQuery extends PageQuery implements AggregationQuery {
+public class ForecastingRevenueChangeQuery extends PageQuery {
     private Date l_shipdateGe;
     private Date l_shipdateLt;
     private BigDecimal l_discountGe;

@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import javax.persistence.Transient;
@@ -37,7 +36,7 @@ import javax.persistence.Transient;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NationalMarketShareQuery extends PageQuery implements AggregationQuery {
+public class NationalMarketShareQuery extends PageQuery {
     @Transient
     private String nationEq;
     private AllNationsQuery allNationsQuery;

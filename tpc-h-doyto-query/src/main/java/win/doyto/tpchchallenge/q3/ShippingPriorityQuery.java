@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import java.sql.Date;
@@ -37,7 +36,7 @@ import java.sql.Date;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShippingPriorityQuery extends PageQuery implements AggregationQuery {
+public class ShippingPriorityQuery extends PageQuery {
     private String c_mktsegment;
     private Date o_orderdateLt;
     private Date l_shipdateGt;

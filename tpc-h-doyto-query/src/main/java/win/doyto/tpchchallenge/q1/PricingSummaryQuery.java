@@ -21,7 +21,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import java.util.Date;
@@ -36,6 +35,6 @@ import java.util.Date;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PricingSummaryQuery extends PageQuery implements AggregationQuery {
+public class PricingSummaryQuery extends PageQuery {
     private Date lShipdateLe;
 }

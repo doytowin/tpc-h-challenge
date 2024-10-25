@@ -18,7 +18,6 @@ package win.doyto.tpchchallenge.q12;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 
 import javax.persistence.Transient;
@@ -36,7 +35,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShippingModesAndOrderPriorityQuery extends PageQuery implements AggregationQuery {
+public class ShippingModesAndOrderPriorityQuery extends PageQuery {
     @Transient
     private String o_orderpriority1;
     @Transient

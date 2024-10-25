@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
-import win.doyto.query.core.AggregationQuery;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
@@ -39,7 +38,7 @@ import win.doyto.tpchchallenge.domain.part.PartEntity;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SmallQuantityOrderRevenueQuery extends PageQuery implements AggregationQuery {
+public class SmallQuantityOrderRevenueQuery extends PageQuery {
     private String p_brand;
     private String p_container;
     @Subquery(select = "2e-1 * AVG(l_quantity)",

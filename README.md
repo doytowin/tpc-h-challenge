@@ -132,7 +132,7 @@ Here is a performance comparison chart on MacBook Air M2 8GB/256GB:
     <tr>
         <td>Q18</td>
         <td>1</td>
-        <td>2</td>
+        <td>1</td>
         <td>1</td>
     </tr>
     <tr>
