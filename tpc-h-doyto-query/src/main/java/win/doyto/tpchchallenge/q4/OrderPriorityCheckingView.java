@@ -19,9 +19,10 @@ package win.doyto.tpchchallenge.q4;
 import lombok.Getter;
 import lombok.Setter;
 import win.doyto.query.annotation.GroupBy;
+import win.doyto.query.annotation.View;
+import win.doyto.tpchchallenge.domain.orders.OrdersEntity;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 
 /**
  * OrderPriorityCheckingView
@@ -31,7 +32,7 @@ import javax.persistence.Entity;
  */
 @Getter
 @Setter
-@Entity(name = "orders t")
+@View(value = OrdersEntity.class, alias = "t")
 public class OrderPriorityCheckingView {
     @GroupBy
     private String o_orderpriority;

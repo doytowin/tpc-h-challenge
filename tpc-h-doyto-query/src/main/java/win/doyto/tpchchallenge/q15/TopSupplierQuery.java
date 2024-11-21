@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019-2023 Forb Yuan
+ * Copyright © 2019-2024 Forb Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,9 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.annotation.Subquery;
 import win.doyto.query.core.PageQuery;
-import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 
 /**
- * TopSupplierQuery
+ * RevenueQuery
  *
  * @author f0rb on 2023/6/13
  * @since 1.0.2
@@ -37,7 +36,6 @@ import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TopSupplierQuery extends PageQuery {
-    private LineItemQuery revenueQuery;
     @Subquery(select = "MAX(total_revenue)", from = RevenueView.class)
     private PageQuery total_revenue;
 }

@@ -25,8 +25,6 @@ import win.doyto.query.core.PageQuery;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 
 /**
  * ForecastingRevenueChangeQuery
@@ -45,14 +43,4 @@ public class ForecastingRevenueChangeQuery extends PageQuery {
     private BigDecimal l_discountGe;
     private BigDecimal l_discountLe;
     private Integer l_quantityLt;
-
-    public void setBaseShipdate(LocalDate date) {
-        l_shipdateGe = Date.valueOf(date);
-        l_shipdateLt = Date.valueOf(date.plus(1, ChronoUnit.YEARS));
-    }
-
-    public void setBaseDiscount(BigDecimal discount) {
-        l_discountGe = discount.subtract(BigDecimal.valueOf(0.01));
-        l_discountLe = discount.add(BigDecimal.valueOf(0.01));
-    }
 }

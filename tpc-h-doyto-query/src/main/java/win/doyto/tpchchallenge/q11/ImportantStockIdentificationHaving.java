@@ -21,10 +21,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import win.doyto.query.core.PageQuery;
+import win.doyto.query.annotation.Subquery;
+import win.doyto.query.core.Having;
+import win.doyto.tpchchallenge.domain.nation.NationEntity;
+import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
+import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
 
 /**
- * ImportantStockIdentificationQuery
+ * ImportantStockIdentificationHaving
  *
  * @author f0rb on 2023/2/18
  * @since 1.0.1
@@ -34,6 +38,8 @@ import win.doyto.query.core.PageQuery;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImportantStockIdentificationQuery extends PageQuery {
-    private String n_name;
+public class ImportantStockIdentificationHaving extends ImportantStockIdentificationQuery implements Having {
+    @Subquery(select = "SUM(ps_supplycost * ps_availqty) * 0.0001000000e-2",
+            from = {PartSuppEntity.class, SupplierEntity.class, NationEntity.class})
+    private ValueQuery valGt;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019-2023 Forb Yuan
+ * Copyright © 2019-2024 Forb Yuan
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,26 @@
  * limitations under the License.
  */
 
-package win.doyto.tpchchallenge.q11;
+package win.doyto.tpchchallenge.q15;
 
-import lombok.*;
-import win.doyto.query.annotation.Subquery;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import win.doyto.query.core.Having;
-import win.doyto.tpchchallenge.domain.nation.NationEntity;
-import win.doyto.tpchchallenge.domain.partsupp.PartSuppEntity;
-import win.doyto.tpchchallenge.domain.supplier.SupplierEntity;
+import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 
 /**
- * ValueHaving
+ * TopSuppliedHaving
  *
- * @author f0rb on 2023/2/18
- * @since 1.0.1
+ * @author f0rb on 2024/9/25
  */
 @Getter
 @Setter
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ValueHaving implements Having {
-    @Subquery(select = "SUM(ps_supplycost * ps_availqty) * 0.0001000000e-2",
-            from = {PartSuppEntity.class, SupplierEntity.class, NationEntity.class})
-    private ValueQuery valGt;
+public class TopSuppliedHaving extends TopSupplierQuery implements Having {
+    private LineItemQuery revenueQuery;
 }

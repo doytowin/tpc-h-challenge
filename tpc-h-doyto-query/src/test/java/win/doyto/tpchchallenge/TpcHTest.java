@@ -14,9 +14,8 @@ import win.doyto.tpchchallenge.q1.PricingSummaryQuery;
 import win.doyto.tpchchallenge.q1.PricingSummaryView;
 import win.doyto.tpchchallenge.q10.ReturnedItemReportingQuery;
 import win.doyto.tpchchallenge.q10.ReturnedItemReportingView;
-import win.doyto.tpchchallenge.q11.ImportantStockIdentificationQuery;
+import win.doyto.tpchchallenge.q11.ImportantStockIdentificationHaving;
 import win.doyto.tpchchallenge.q11.ImportantStockIdentificationView;
-import win.doyto.tpchchallenge.q11.ValueHaving;
 import win.doyto.tpchchallenge.q11.ValueQuery;
 import win.doyto.tpchchallenge.q12.ShippingModesAndOrderPriorityQuery;
 import win.doyto.tpchchallenge.q12.ShippingModesAndOrderPriorityView;
@@ -26,7 +25,7 @@ import win.doyto.tpchchallenge.q13.CustomerOrdersQuery;
 import win.doyto.tpchchallenge.q13.JoinOrders;
 import win.doyto.tpchchallenge.q14.PromotionEffectQuery;
 import win.doyto.tpchchallenge.q14.PromotionEffectView;
-import win.doyto.tpchchallenge.q15.TopSupplierQuery;
+import win.doyto.tpchchallenge.q15.TopSuppliedHaving;
 import win.doyto.tpchchallenge.q15.TopSupplierView;
 import win.doyto.tpchchallenge.q16.PartsSupplierRelationshipQuery;
 import win.doyto.tpchchallenge.q16.PartsSupplierRelationshipView;
@@ -200,12 +199,15 @@ class TpcHTest {
 
     @Test
     void q6ForecastingRevenueChangeQuery() {
-        ForecastingRevenueChangeQuery query = new ForecastingRevenueChangeQuery();
         LocalDate date = LocalDate.of(1994, 1, 1);
-        query.setBaseShipdate(date);
-        query.setBaseDiscount(BigDecimal.valueOf(0.03));
-        query.setL_quantityLt(31);
-
+        ForecastingRevenueChangeQuery query = ForecastingRevenueChangeQuery
+                .builder()
+                .l_shipdateGe(Date.valueOf(date))
+                .l_shipdateLt(Date.valueOf(date.plusYears(1)))
+                .l_discountGe(BigDecimal.valueOf(0.02))
+                .l_discountLe(BigDecimal.valueOf(0.04))
+                .l_quantityLt(31)
+                .build();
         List<ForecastingRevenueChangeView> list = aggregateClient.query(ForecastingRevenueChangeView.class, query);
 
         assertThat(list).extracting("revenue")
@@ -306,14 +308,10 @@ class TpcHTest {
 
     @Test
     void q11ImportantStockIdentificationQuery() {
-        ValueHaving having = ValueHaving
-                .builder()
-                .valGt(ValueQuery.builder().n_name("GERMANY").build())
-                .build();
-        ImportantStockIdentificationQuery query = ImportantStockIdentificationQuery
+        ImportantStockIdentificationHaving query = ImportantStockIdentificationHaving
                 .builder()
                 .n_name("GERMANY")
-                .having(having)
+                .valGt(ValueQuery.builder().n_name("GERMANY").build())
                 .sort("val,DESC")
                 .build();
 
@@ -391,14 +389,13 @@ class TpcHTest {
                 .l_shipdateGe(startShipdate)
                 .l_shipdateLt(endShipdate)
                 .build();
-        TopSupplierQuery query = TopSupplierQuery
-                .builder()
-                .revenueQuery(lineitemQuery)
-                .total_revenue(new PageQuery())
-                .sort("s_suppkey")
-                .build();
 
-        List<TopSupplierView> list = aggregateClient.query(TopSupplierView.class, query);
+        TopSuppliedHaving having = TopSuppliedHaving
+                .builder().total_revenue(new PageQuery())
+                .revenueQuery(lineitemQuery)
+                .sort("s_suppkey").build();
+
+        List<TopSupplierView> list = aggregateClient.query(TopSupplierView.class, having);
 
         assertThat(list).extracting("s_suppkey", "s_name", "total_revenue")
                         .containsExactly(Tuple.tuple(508, "Supplier#000000508", 60072.1000));
