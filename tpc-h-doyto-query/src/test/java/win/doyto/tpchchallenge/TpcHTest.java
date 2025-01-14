@@ -5,7 +5,6 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import win.doyto.query.core.AggregateClient;
-import win.doyto.query.core.DataQueryClient;
 import win.doyto.query.core.PageQuery;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemQuery;
 import win.doyto.tpchchallenge.domain.part.PartQuery;
@@ -89,9 +88,6 @@ class TpcHTest {
 
     RecursiveComparisonConfiguration configuration = RecursiveComparisonConfiguration
             .builder().withComparatorForType(BigDecimal::compareTo, BigDecimal.class).build();
-
-    @Resource
-    private DataQueryClient dataQueryClient;
 
     @Resource
     private AggregateClient aggregateClient;

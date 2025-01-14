@@ -16,10 +16,7 @@
 
 package win.doyto.tpchchallenge.q8;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import win.doyto.query.core.PageQuery;
 
@@ -37,6 +34,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AllNationsQuery extends PageQuery {
+    @Builder.Default
+    private boolean n1$nRegionkeyEqRRegionkey = true;
     private String r_name;
     private Date o_orderdateGe;
     private Date o_orderdateLe;
