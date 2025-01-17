@@ -42,10 +42,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Benchmark)
-@Fork(value = 1, jvmArgs = {"-Xms256M", "-Xmx2G"})
+@Fork(value = 1, jvmArgs = {"-Xms256M", "-Xmx2G", "-XX:+UseG1GC"})
 @Threads(4)
-@Warmup(iterations = 3, time = 5)
-@Measurement(iterations = 3, time = 10) // 正式测试3轮，每轮100秒
+@Warmup(iterations = 3, time = 3)
+@Measurement(iterations = 3, time = 1)
 public class TpcHBenchmark {
 
     static final RecursiveComparisonConfiguration configuration = RecursiveComparisonConfiguration
