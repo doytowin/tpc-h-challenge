@@ -18,6 +18,7 @@ package win.doyto.tpchchallenge.q12;
 
 import lombok.Getter;
 import lombok.Setter;
+import win.doyto.query.annotation.Case;
 import win.doyto.query.annotation.GroupBy;
 import win.doyto.query.annotation.View;
 import win.doyto.tpchchallenge.domain.lineitem.LineItemEntity;
@@ -38,8 +39,12 @@ import javax.persistence.Column;
 public class ShippingModesAndOrderPriorityView {
     @GroupBy
     private String l_shipmode;
-    @Column(name = "SUM(CASE WHEN o_orderpriority = #{o_orderpriority1} OR o_orderpriority = #{o_orderpriority2} THEN 1 ELSE 0 END)")
+
+    @Case(@Case.Item(when = "o_orderpriorityIn", then = "1"))
+    @Column(name = "SUM(@Case)")
     private Integer high_line_count;
-    @Column(name = "SUM(CASE WHEN o_orderpriority <> #{o_orderpriority1} AND o_orderpriority <> #{o_orderpriority2} THEN 1 ELSE 0 END)")
+
+    @Case(@Case.Item(when = "o_orderpriorityNotIn", then = "1"))
+    @Column(name = "SUM(@Case)")
     private Integer low_line_count;
 }

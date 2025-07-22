@@ -313,8 +313,8 @@ class TpcHStatementsTest {
                 " AND l_suppkey = s_suppkey" +
                 " AND o_custkey = c_custkey" +
                 " AND c_nationkey = n2.n_nationkey" +
-                " AND ((n1.n_name = ? AND n2.n_name = ?)" +
-                " OR (n1.n_name = ? AND n2.n_name = ?))" +
+                " AND (n1.n_name = ? AND n2.n_name = ?" +
+                " OR n1.n_name = ? AND n2.n_name = ?)" +
                 " AND l_shipdate >= ? AND l_shipdate <= ?" +
                 ") AS shipping" +
                 " GROUP BY supp_nation, cust_nation, l_year" +
@@ -502,8 +502,8 @@ class TpcHStatementsTest {
     @Test
     void q12ShippingModesAndOrderPriorityQuery() {
         String expected = "SELECT l_shipmode," +
-                " SUM(CASE WHEN o_orderpriority = ? OR o_orderpriority = ? THEN 1 ELSE 0 END) AS high_line_count," +
-                " SUM(CASE WHEN o_orderpriority <> ? AND o_orderpriority <> ? THEN 1 ELSE 0 END) AS low_line_count" +
+                " SUM(CASE WHEN o_orderpriority IN (?, ?) THEN 1 ELSE 0 END) AS high_line_count," +
+                " SUM(CASE WHEN o_orderpriority NOT IN (?, ?) THEN 1 ELSE 0 END) AS low_line_count" +
                 " FROM orders, lineitem" +
                 " WHERE l_orderkey = o_orderkey" +
                 " AND l_shipmode IN (?, ?)" +
@@ -517,8 +517,8 @@ class TpcHStatementsTest {
         LocalDate date = LocalDate.of(1994, 1, 1);
         ShippingModesAndOrderPriorityQuery query = ShippingModesAndOrderPriorityQuery
                 .builder()
-                .o_orderpriority1("1-URGENT")
-                .o_orderpriority2("2-HIGH")
+                .o_orderpriorityIn(Arrays.asList("1-URGENT", "2-HIGH"))
+                .o_orderpriorityNotIn(Arrays.asList("1-URGENT", "2-HIGH"))
                 .l_shipmodeIn(Arrays.asList("MAIL", "SHIP"))
                 .l_receiptdateGe(Date.valueOf(date))
                 .l_receiptdateLt(Date.valueOf(date.plusYears(1)))
@@ -716,28 +716,28 @@ class TpcHStatementsTest {
                 " SUM(l_extendedprice * (1 - l_discount)) AS revenue" +
                 " FROM lineitem, part" +
                 " WHERE l_partkey = p_partkey" +
-                " AND ((p_brand = ?" +
+                " AND (p_brand = ?" +
                 " AND p_container IN (?, ?, ?, ?)" +
                 " AND l_quantity >= ?" +
                 " AND l_quantity <= ?" +
                 " AND p_size >= ?" +
                 " AND p_size <= ?" +
                 " AND l_shipmode IN (?, ?)" +
-                ") OR (p_brand = ?" +
+                " OR p_brand = ?" +
                 " AND p_container IN (?, ?, ?, ?)" +
                 " AND l_quantity >= ?" +
                 " AND l_quantity <= ?" +
                 " AND p_size >= ?" +
                 " AND p_size <= ?" +
                 " AND l_shipmode IN (?, ?)" +
-                ") OR (p_brand = ?" +
+                " OR p_brand = ?" +
                 " AND p_container IN (?, ?, ?, ?)" +
                 " AND l_quantity >= ?" +
                 " AND l_quantity <= ?" +
                 " AND p_size >= ?" +
                 " AND p_size <= ?" +
                 " AND l_shipmode IN (?, ?)" +
-                "))" +
+                ")" +
                 " AND l_shipinstruct = ?";
 
         LineItemFilter LineItemFilter1 = LineItemFilter

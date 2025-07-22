@@ -325,8 +325,8 @@ class TpcHTest {
         LocalDate date = LocalDate.of(1992, 1, 1);
         ShippingModesAndOrderPriorityQuery query = ShippingModesAndOrderPriorityQuery
                 .builder()
-                .o_orderpriority1("1-URGENT")
-                .o_orderpriority2("2-HIGH")
+                .o_orderpriorityIn(Arrays.asList("1-URGENT", "2-HIGH"))
+                .o_orderpriorityNotIn(Arrays.asList("1-URGENT", "2-HIGH"))
                 .l_shipmodeIn(Arrays.asList("RAIL", "SHIP"))
                 .l_receiptdateGe(Date.valueOf(date))
                 .l_receiptdateLt(Date.valueOf(date.plusYears(1)))

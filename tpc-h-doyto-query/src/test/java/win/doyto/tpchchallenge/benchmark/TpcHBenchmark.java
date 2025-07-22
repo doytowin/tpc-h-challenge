@@ -10,7 +10,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ConfigurableApplicationContext;
-import win.doyto.query.core.DataQueryClient;
+import win.doyto.query.core.AggregateClient;
+import win.doyto.tpchchallenge.TpcHApplication;
 import win.doyto.tpchchallenge.q1.PricingSummaryQuery;
 import win.doyto.tpchchallenge.q1.PricingSummaryView;
 import win.doyto.tpchchallenge.q2.MinimumCostSupplierQuery;
@@ -38,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  *
  * @author f0rb on 2024/8/6
  */
-@SpringBootTest(classes = TpcHBenchmarkApp.class)
+@SpringBootTest(classes = TpcHApplication.class)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Benchmark)
@@ -52,7 +53,7 @@ public class TpcHBenchmark {
             .builder().withComparatorForType(BigDecimal::compareTo, BigDecimal.class).build();
 
     @Resource
-    private DataQueryClient dataQueryClient;
+    private AggregateClient aggregateClient;
     @Resource
     private JdbcTpcHService jdbcTpcHService;
     private boolean benchMark;
@@ -64,19 +65,18 @@ public class TpcHBenchmark {
 
     private ConfigurableApplicationContext context;
 
-    @Setup(Level.Iteration)
+    @Setup
     public void init() {
         benchMark = true;
         // 这里的WebApplication.class是项目里的spring boot启动类
-        context = SpringApplication.run(TpcHBenchmarkApp.class, "--spring.profiles.active=mysql8");
-        dataQueryClient = context.getBean(DataQueryClient.class);
+        context = SpringApplication.run(TpcHApplication.class, "--spring.profiles.active=mysql8");
+        aggregateClient = context.getBean(AggregateClient.class);
         jdbcTpcHService = context.getBean(JdbcTpcHService.class);
     }
 
     @TearDown
     public void down() {
         context.close();
-        context = null;
     }
 
     @Benchmark
@@ -89,11 +89,11 @@ public class TpcHBenchmark {
                 .sort("l_returnflag;l_linestatus")
                 .build();
 
-        List<PricingSummaryView> list = dataQueryClient.aggregate(query, PricingSummaryView.class);
+        List<PricingSummaryView> list = aggregateClient.query(PricingSummaryView.class, query);
 
         if (benchMark) return;
         assertThat(list).hasSize(3)
-                        .extracting("l_returnflag", "l_linestatus", "avg_disc")
+                .extracting("l_returnflag", "l_linestatus", "avg_disc")
                         .usingRecursiveFieldByFieldElementComparator(configuration)
                         .containsExactly(
                                 Tuple.tuple("A", "F", BigDecimal.valueOf(0.048)),
@@ -136,7 +136,7 @@ public class TpcHBenchmark {
                 .sort("s_acctbal,DESC;n_name;s_name;p_partkey")
                 .build();
 
-        List<MinimumCostSupplierView> list = dataQueryClient.aggregate(query, MinimumCostSupplierView.class);
+        List<MinimumCostSupplierView> list = aggregateClient.query(MinimumCostSupplierView.class, query);
 
         if (benchMark) return;
         assertThat(list).hasSize(2)
@@ -173,15 +173,12 @@ public class TpcHBenchmark {
     @Benchmark
     public void q3ShippingPriorityQuery() {
         Date date = Date.valueOf(LocalDate.of(1995, 3, 15));
-        ShippingPriorityQuery query = ShippingPriorityQuery
-                .builder()
-                .c_mktsegment("BUILDING")
-                .o_orderdateLt(date)
-                .l_shipdateGt(date)
-                .sort("revenue,DESC;o_orderdate")
-                .build();
-
-        List<ShippingPriorityView> list = dataQueryClient.aggregate(query, ShippingPriorityView.class);
+        ShippingPriorityQuery query = new ShippingPriorityQuery();
+        query.setC_mktsegment("BUILDING");
+        query.setO_orderdateLt(date);
+        query.setL_shipdateGt(date);
+        query.setSort("revenue,DESC;o_orderdate");
+        List<ShippingPriorityView> list = aggregateClient.query(ShippingPriorityView.class, query);
 
         if (benchMark) return;
         assertThat(list).extracting("l_orderkey", "revenue", "o_shippriority")
@@ -225,7 +222,7 @@ public class TpcHBenchmark {
                 .sort("o_orderpriority")
                 .build();
 
-        List<OrderPriorityCheckingView> list = dataQueryClient.aggregate(query, OrderPriorityCheckingView.class);
+        List<OrderPriorityCheckingView> list = aggregateClient.query(OrderPriorityCheckingView.class, query);
 
         if (benchMark) return;
         assertThat(list).extracting("o_orderpriority", "order_count")
@@ -273,7 +270,7 @@ public class TpcHBenchmark {
                 .sort("revenue,DESC")
                 .build();
 
-        List<LocalSupplierVolumeView> list = dataQueryClient.aggregate(query, LocalSupplierVolumeView.class);
+        List<LocalSupplierVolumeView> list = aggregateClient.query(LocalSupplierVolumeView.class, query);
 
         if (benchMark) return;
         assertThat(list).isEmpty();
